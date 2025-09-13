@@ -44,7 +44,7 @@ public class ClientEvents {
         BlockPos min = anchor.offset(-halfX, 0, -halfZ);
         BlockPos max = min.offset(sizeX, sizeY, sizeZ);
 
-        boolean valid = structure.validateSpace(level, min);
+        boolean valid = structure.validateSpace(level, anchor);
 
         double eps = 0.0025D;
         double minX = min.getX() - eps;

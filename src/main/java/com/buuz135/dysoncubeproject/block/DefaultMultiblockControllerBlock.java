@@ -8,18 +8,18 @@ import com.hrznstudio.titanium.event.handler.EventManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class DefaultMultiblockControllerBlock<T extends BasicTile<T>> extends RotatableBlock<T> {
 
     static {
-        EventManager.forge(BlockEvent.EntityPlaceEvent.class).process(event -> {
-            if (event.getPlacedBlock().getBlock() instanceof DefaultMultiblockControllerBlock multiblockControllerBlock) {
+        EventManager.forge(BlockEvent.EntityPlaceEvent.class, EventPriority.HIGHEST).process(event -> {
 
-            }
         }).subscribe();
     }
 
@@ -34,4 +34,16 @@ public abstract class DefaultMultiblockControllerBlock<T extends BasicTile<T>> e
 
     public abstract MultiblockStructure getMultiblockStructure();
 
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
+        if (this.getMultiblockStructure().validateSpace(context.getLevel(), context.getClickedPos())) {
+            return this.defaultBlockState();
+        }
+        return null;
+    }
 }

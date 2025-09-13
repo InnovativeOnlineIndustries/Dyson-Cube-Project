@@ -1,6 +1,7 @@
 package com.buuz135.dysoncubeproject;
 
 import com.buuz135.dysoncubeproject.client.ClientSetup;
+import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -51,5 +53,11 @@ public class DysonCubeProject extends ModuleController {
     protected void initModules() {
         addCreativeTab("main", () -> new ItemStack(Blocks.DIRT), "dyson_cube_project", DCPContent.TAB);
         DCPContent.Blocks.init();
+    }
+
+    @Override
+    public void addDataProvider(GatherDataEvent event) {
+        super.addDataProvider(event);
+        event.addProvider(new DCPBlockstateProvider(event.getGenerator(), MODID, event.getExistingFileHelper()));
     }
 }
