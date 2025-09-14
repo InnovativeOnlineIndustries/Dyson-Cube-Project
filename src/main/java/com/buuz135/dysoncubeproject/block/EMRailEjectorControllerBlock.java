@@ -4,6 +4,8 @@ import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
 import com.buuz135.dysoncubeproject.block.tile.MultiblockStructureBlockEntity;
 import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
+import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +42,11 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (level instanceof ServerLevel) {
+            if (placer != null) {
+                var dyson = DysonSphereProgressSavedData.get(level);
+                dyson.getSpheres().computeIfAbsent(placer.getStringUUID(), s -> new DysonSphereConfiguration());
+                dyson.setDirty();
+            }
             var lowerCorner = pos.offset(-1, 0, -1);
             for (int x = 0; x < 3; x++) {
                 for (int z = 0; z < 3; z++) {

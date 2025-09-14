@@ -2,12 +2,19 @@ package com.buuz135.dysoncubeproject;
 
 import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
+import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
+import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
+import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
+import com.hrznstudio.titanium.network.NetworkHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -27,6 +34,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -39,13 +48,23 @@ public class DysonCubeProject extends ModuleController {
 
     public static final String MODID = "dysoncubeproject";
     private static final Logger LOGGER = LogUtils.getLogger();
+    public static NetworkHandler NETWORK = new NetworkHandler(MODID);
 
     public DysonCubeProject(Dist dist, IEventBus modEventBus, ModContainer modContainer) {
         super(modContainer);
+        NETWORK.registerMessage("dyson_sphere_sync", DysonSphereSyncMessage.class);
 
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if (dist == Dist.CLIENT) ClientSetup.init();
+
+        EventManager.forge(LevelTickEvent.Post.class).process(post -> {
+            if (post.getLevel() instanceof ServerLevel serverLevel && post.getLevel().getGameTime() % 100 == 0) {
+                var packet = new DysonSphereSyncMessage(DysonSphereProgressSavedData.get(serverLevel).save(new CompoundTag(), serverLevel.getServer().registryAccess()));
+                for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
+                    NETWORK.sendTo(packet, player);
+                }
+            }
+        }).subscribe();
     }
 
 

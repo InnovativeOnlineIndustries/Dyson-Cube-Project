@@ -1,5 +1,7 @@
 package com.buuz135.dysoncubeproject.client;
 
+import com.buuz135.dysoncubeproject.world.ClientDysonSphere;
+import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -7,7 +9,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import com.mojang.math.Axis;
 
@@ -21,6 +22,13 @@ public class ClientSkyRender {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
+
+        var subscribedTo = ClientDysonSphere.DYSON_SPHERE_PROGRESS.getSubscribedPlayers().getOrDefault(mc.player.getStringUUID(), mc.player.getStringUUID());
+        var sphere = ClientDysonSphere.DYSON_SPHERE_PROGRESS.getSpheres().getOrDefault(subscribedTo, null);
+
+        if (sphere == null) return;
+        var progress = (float) sphere.getProgress();
+        progress = mc.level.getGameTime() % 300 / 300.0f;
 
         PoseStack pose = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
@@ -54,7 +62,6 @@ public class ClientSkyRender {
         if (DCPShaders.DYSON_SUN != null) {
             // Update custom uniforms for the shader
             ShaderInstance shader = DCPShaders.DYSON_SUN;
-            DysonSphereProgress.set(1f);
 
             try {
 
@@ -72,7 +79,7 @@ public class ClientSkyRender {
             pose.mulPose(Axis.XP.rotationDegrees(90));
             pose.mulPose(Axis.XP.rotationDegrees(skyAngle));
 
-            pose.translate(0.0f, 0.0f, -300.0f);
+            pose.translate(-30.0f, 0.0f, -310.0f);
 
             // Build a square in local XY plane; shader expects half-extent ~30 (it divides by 60.0 for UV)
             float s = 30.0f;
@@ -81,10 +88,10 @@ public class ClientSkyRender {
             VertexConsumer vc = buffer.getBuffer(DysonSunRenderType.dysonSun());
 
             // Quad (counter-clockwise) at z=0 in local space after transformations
-            emit(vc, pose, -s, s, 0.0f, r, g, b, a);
-            emit(vc, pose, s, s, 0.0f, r, g, b, a);
-            emit(vc, pose, s, -s, 0.0f, r, g, b, a);
-            emit(vc, pose, -s, -s, 0.0f, r, g, b, a);
+            emit(vc, pose, 0, s, 0.0f, r, g, b, a);
+            emit(vc, pose, s * 2 * progress, s, 0.0f, r, g, b, a);
+            emit(vc, pose, s * 2 * progress, -s, 0.0f, r, g, b, a);
+            emit(vc, pose, 0, -s, 0.0f, r, g, b, a);
 
             pose.popPose();
 
