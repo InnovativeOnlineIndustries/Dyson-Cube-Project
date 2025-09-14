@@ -1,6 +1,8 @@
-package com.buuz135.dysoncubeproject.client;
+package com.buuz135.dysoncubeproject.client.render;
 
 import com.buuz135.dysoncubeproject.block.DefaultMultiblockControllerBlock;
+import com.buuz135.dysoncubeproject.client.DCPRenderTypes;
+import com.buuz135.dysoncubeproject.client.DCPShaders;
 import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,7 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 
-public class ClientEvents {
+public class HologramRender {
 
     public static void blockOverlayEvent(RenderHighlightEvent.Block event) {
         Player player = Minecraft.getInstance().player;
@@ -79,7 +81,7 @@ public class ClientEvents {
             } catch (Throwable ignored) {
             }
 
-            VertexConsumer quad = buffer.getBuffer(HologramRenderType.hologram());
+            VertexConsumer quad = buffer.getBuffer(DCPRenderTypes.hologram());
             float faceAlpha = 0.85f; // base alpha; shader modulates further
             // Slight inset to avoid z-fighting with world blocks
             double inset = 0.0025;
@@ -125,6 +127,7 @@ public class ClientEvents {
 
         pose.popPose();
     }
+
 
     private static DefaultMultiblockControllerBlock<?> getHeldController(ItemStack stack) {
         if (stack == null) return null;

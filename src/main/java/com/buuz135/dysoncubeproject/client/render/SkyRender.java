@@ -1,20 +1,17 @@
-package com.buuz135.dysoncubeproject.client;
+package com.buuz135.dysoncubeproject.client.render;
 
+import com.buuz135.dysoncubeproject.client.DCPRenderTypes;
+import com.buuz135.dysoncubeproject.client.DCPShaders;
 import com.buuz135.dysoncubeproject.world.ClientDysonSphere;
-import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import com.mojang.math.Axis;
 
-public class ClientSkyRender {
-
-    private static final ResourceLocation GREEN_SUN_TEX = ResourceLocation.fromNamespaceAndPath("minecraft", "textures/misc/white.png");
+public class SkyRender {
 
     public static void onRenderStage(RenderLevelStageEvent event) { //TODO HIDE WHEN RAINING
         // Draw after vanilla sky (sun/moon) so we render "on top of the sun"
@@ -35,30 +32,6 @@ public class ClientSkyRender {
 
         float skyAngle = mc.level.getTimeOfDay(event.getPartialTick().getGameTimeDeltaTicks()) * 360.0f;
 
-        // 1) Draw the green textured quad in front of the sun
-        if (false) {
-            pose.pushPose();
-            pose.mulPose(event.getModelViewMatrix());
-            pose.mulPose(Axis.YP.rotationDegrees(-90.0F));
-            pose.mulPose(Axis.XP.rotationDegrees(71));
-            pose.mulPose(Axis.XP.rotationDegrees(skyAngle));
-
-            pose.translate(0.0f, 0.0f, -300.0f);
-
-            float sTex = 30.0f;
-            VertexConsumer vcTex = buffer.getBuffer(RenderType.entityTranslucent(GREEN_SUN_TEX));
-            // Full white so texture shows as-is, set fullbright light so it pops in sky
-            int light = 0xF000F0; // maximum brightness
-            emitTex(vcTex, pose, -sTex, sTex, 0.0f, 0.0f, 0.0f, light, 0, 1, 0, 1);
-            emitTex(vcTex, pose, sTex, sTex, 0.0f, 1.0f, 0.0f, light, 0, 1, 0, 1);
-            emitTex(vcTex, pose, sTex, -sTex, 0.0f, 1.0f, 1.0f, light, 0, 1, 0, 1);
-            emitTex(vcTex, pose, -sTex, -sTex, 0.0f, 0.0f, 1.0f, light, 0, 1, 0, 1);
-            pose.popPose();
-            buffer.endBatch(RenderType.entityTranslucent(GREEN_SUN_TEX));
-        }
-
-
-        // 2) If our custom shader is available, update uniforms and draw the shader quad similarly
         if (DCPShaders.DYSON_SUN != null) {
             // Update custom uniforms for the shader
             ShaderInstance shader = DCPShaders.DYSON_SUN;
@@ -85,7 +58,7 @@ public class ClientSkyRender {
             float s = 30.0f;
             float r = 1.0f, g = 1.0f, b = 1.0f, a = 1.0f;
 
-            VertexConsumer vc = buffer.getBuffer(DysonSunRenderType.dysonSun());
+            VertexConsumer vc = buffer.getBuffer(DCPRenderTypes.dysonSun());
 
             // Quad (counter-clockwise) at z=0 in local space after transformations
             emit(vc, pose, 0, s, 0.0f, r, g, b, a);
@@ -96,7 +69,7 @@ public class ClientSkyRender {
             pose.popPose();
 
             // Flush this render type to ensure it draws this frame
-            buffer.endBatch(DysonSunRenderType.dysonSun());
+            buffer.endBatch(DCPRenderTypes.dysonSun());
         }
 
     }
@@ -106,12 +79,4 @@ public class ClientSkyRender {
         vc.addVertex(pose.last().pose(), x, y, z).setColor(r, g, b, a);
     }
 
-    private static void emitTex(VertexConsumer vc, PoseStack pose, float x, float y, float z, float u, float v, int light, float r, float g, float b, float a) {
-        vc.addVertex(pose.last().pose(), x, y, z)
-                .setColor(r, g, b, a)
-                .setNormal(0, 0, 0)
-                .setUv(u, v)
-                .setOverlay(0)
-                .setLight(light);
-    }
 }

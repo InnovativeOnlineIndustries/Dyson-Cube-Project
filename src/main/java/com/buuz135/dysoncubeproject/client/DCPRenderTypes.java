@@ -5,9 +5,10 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 
-public class DysonSunRenderType {
+public class DCPRenderTypes {
 
     private static RenderType DYSON_SUN;
+    private static RenderType HOLOGRAM;
 
     public static RenderType dysonSun() {
         if (DYSON_SUN == null) {
@@ -27,5 +28,25 @@ public class DysonSunRenderType {
                     state);
         }
         return DYSON_SUN;
+    }
+
+    public static RenderType hologram() {
+        if (HOLOGRAM == null) {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> DCPShaders.HOLOGRAM))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                    .createCompositeState(true);
+            HOLOGRAM = RenderType.create("dysoncubeproject_hologram",
+                    DefaultVertexFormat.POSITION_COLOR,
+                    VertexFormat.Mode.QUADS,
+                    256,
+                    false,
+                    true,
+                    state);
+        }
+        return HOLOGRAM;
     }
 }

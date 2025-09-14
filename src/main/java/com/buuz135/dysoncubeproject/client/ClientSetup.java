@@ -1,6 +1,8 @@
 package com.buuz135.dysoncubeproject.client;
 
 import com.buuz135.dysoncubeproject.DysonCubeProject;
+import com.buuz135.dysoncubeproject.client.render.HologramRender;
+import com.buuz135.dysoncubeproject.client.render.SkyRender;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.renderer.ShaderInstance;
@@ -12,8 +14,8 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 public class ClientSetup {
 
     public static void init() {
-        EventManager.forge(RenderHighlightEvent.Block.class).process(ClientEvents::blockOverlayEvent).subscribe();
-        EventManager.forge(RenderLevelStageEvent.class).process(ClientSkyRender::onRenderStage).subscribe();
+        EventManager.forge(RenderHighlightEvent.Block.class).process(HologramRender::blockOverlayEvent).subscribe();
+        EventManager.forge(RenderLevelStageEvent.class).process(SkyRender::onRenderStage).subscribe();
         EventManager.mod(RegisterShadersEvent.class).process(ClientSetup::registerShaders).subscribe();
     }
 
