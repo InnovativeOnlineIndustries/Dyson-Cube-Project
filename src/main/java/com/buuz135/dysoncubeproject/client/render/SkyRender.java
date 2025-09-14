@@ -18,14 +18,13 @@ public class SkyRender {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) return;
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return;
+        if (mc.level == null || mc.level.isRainingAt(mc.player.getOnPos())) return;
 
         var subscribedTo = ClientDysonSphere.DYSON_SPHERE_PROGRESS.getSubscribedPlayers().getOrDefault(mc.player.getStringUUID(), mc.player.getStringUUID());
         var sphere = ClientDysonSphere.DYSON_SPHERE_PROGRESS.getSpheres().getOrDefault(subscribedTo, null);
 
         if (sphere == null) return;
         var progress = (float) sphere.getProgress();
-        progress = mc.level.getGameTime() % 300 / 300.0f;
 
         PoseStack pose = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
