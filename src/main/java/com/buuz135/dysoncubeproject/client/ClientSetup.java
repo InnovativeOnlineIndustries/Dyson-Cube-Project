@@ -24,6 +24,7 @@ public class ClientSetup {
         EventManager.mod(RegisterShadersEvent.class).process(ClientSetup::registerShaders).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
             DCPExtraModels.EM_RAILEJECTOR_GUN = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_gun"), event.getModelBakery());
+            DCPExtraModels.EM_RAILEJECTOR_PROJECTILE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_projectile"), event.getModelBakery());
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
             event.registerBlockEntityRenderer((BlockEntityType<? extends EMRailEjectorBlockEntity>) DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.type().get(), context -> new EMRailEjectorRender());
@@ -43,6 +44,13 @@ public class ClientSetup {
             event.registerShader(shader, s -> DCPShaders.DYSON_SUN = s);
         } catch (Exception e) {
             DCPShaders.DYSON_SUN = null;
+        }
+        // Register Rail Electric shader
+        try {
+            ShaderInstance shader = new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "rail_electric"), DefaultVertexFormat.POSITION_COLOR);
+            event.registerShader(shader, s -> DCPShaders.RAIL_ELECTRIC = s);
+        } catch (Exception e) {
+            DCPShaders.RAIL_ELECTRIC = null;
         }
     }
 
