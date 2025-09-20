@@ -2,10 +2,14 @@ package com.buuz135.dysoncubeproject;
 
 import com.buuz135.dysoncubeproject.block.EMRailEjectorControllerBlock;
 import com.buuz135.dysoncubeproject.block.MultiblockStructureBlock;
+import com.buuz135.dysoncubeproject.item.DysonComponentItem;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.TitaniumTab;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class DCPContent {
 
@@ -22,5 +26,17 @@ public class DCPContent {
 
     }
 
+    public static class Items {
+
+        public static DeferredHolder<Item, Item> SOLAR_SAIL = REGISTRY.registerGeneric(Registries.ITEM, "solar_sail", () -> new DysonComponentItem(1, 0, TAB));
+        public static DeferredHolder<Item, Item> SOLAR_SAIL_PACKAGE = REGISTRY.registerGeneric(Registries.ITEM, "solar_sail_package", () -> new DysonComponentItem(8, 0, TAB));
+
+        public static DeferredHolder<Item, Item> BEAM = REGISTRY.registerGeneric(Registries.ITEM, "beam", () -> new DysonComponentItem(0, 1, TAB));
+        public static DeferredHolder<Item, Item> BEAM_PACKAGE = REGISTRY.registerGeneric(Registries.ITEM, "beam_package", () -> new DysonComponentItem(0, 4, TAB));
+
+
+        public static void init() {
+        }
+    }
 
 }

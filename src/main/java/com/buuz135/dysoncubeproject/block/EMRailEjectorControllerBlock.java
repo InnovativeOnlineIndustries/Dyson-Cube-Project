@@ -63,6 +63,7 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
                 if (serverLevel.getBlockEntity(pos) instanceof EMRailEjectorBlockEntity blockEntity) {
                     blockEntity.setDysonSphereId(subscribedSphere);
                 }
+                dyson.setDirty();
             }
             var lowerCorner = pos.offset(-1, 0, -1);
             for (int x = 0; x < 3; x++) {

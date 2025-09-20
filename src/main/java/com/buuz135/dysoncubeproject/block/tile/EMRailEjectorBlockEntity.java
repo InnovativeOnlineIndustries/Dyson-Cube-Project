@@ -1,6 +1,9 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
+import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
+import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -57,15 +60,19 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     private long lastExecution;
     @Save
     private ProgressBarComponent<EMRailEjectorBlockEntity> progressBarComponent;
+    @Save
     private InventoryComponent<EMRailEjectorBlockEntity> input;
+    @Save
     private String dysonSphereId;
 
     public EMRailEjectorBlockEntity(BasicTileBlock<EMRailEjectorBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
-        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(18 + 18 + 8, 42, 100).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
+        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 8, 42, 100).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
             syncObject(this.progressBarComponent);
         }).setOnFinishWork(this::onFinishWork).setIncreaseType(true).setComponentHarness(this).setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).setColor(DyeColor.CYAN);
-        this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 18, 42, 1).setSlotToColorRender(0, DyeColor.CYAN);
+        this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 10, 42, 1)
+                .setInputFilter((itemStack, integer) -> itemStack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) > 0 || itemStack.getOrDefault(DCPAttachments.BEAM, 0) > 0)
+                .setSlotToColorRender(0, DyeColor.CYAN);
         this.currentYaw = 180;
         this.currentPitch = 90;
         this.targetYaw = 180; //HORIZONTAL
@@ -81,12 +88,26 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         if (time <= 10 || time >= 360 - 10) {
             return false;
         }
+        var dyson = DysonSphereProgressSavedData.get(this.level).getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration());
+        if (dyson.getProgress() >= 1) return false;
+        var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
+        var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
+        if (solarPanels > 0 && dyson.getSolarPanels() >= dyson.getMaxSolarPanels()) return false;
+        if (beams > 0 && dyson.getBeams() >= dyson.getMaxBeams()) return false;
         return true;
     }
 
     private void onFinishWork() {
+        var data = DysonSphereProgressSavedData.get(this.level);
+        var dyson = data.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration());
+        var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
+        var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
         this.input.getStackInSlot(0).shrink(1);
         this.lastExecution = this.getLevel().getGameTime();
+
+        dyson.increaseBeams(beams);
+        dyson.increaseSolarPanels(solarPanels);
+        data.setDirty();
         syncObject(this.lastExecution);
     }
 
@@ -179,7 +200,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
         list.addAll(this.progressBarComponent.getScreenAddons());
         list.addAll(this.input.getScreenAddons());
-        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 72, 24));
+        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 64, 24));
         return list;
     }
 

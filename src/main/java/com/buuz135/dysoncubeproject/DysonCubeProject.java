@@ -11,6 +11,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +21,8 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -58,13 +61,14 @@ public class DysonCubeProject extends ModuleController {
         if (dist == Dist.CLIENT) ClientSetup.init();
 
         EventManager.forge(LevelTickEvent.Post.class).process(post -> {
-            if (post.getLevel() instanceof ServerLevel serverLevel && post.getLevel().getGameTime() % 100 == 0) {
+            if (post.getLevel() instanceof ServerLevel serverLevel && serverLevel.dimensionTypeRegistration().getRegisteredName().equals(BuiltinDimensionTypes.OVERWORLD.location().toString()) && post.getLevel().getGameTime() % 20 == 0) {
                 var packet = new DysonSphereSyncMessage(DysonSphereProgressSavedData.get(serverLevel).save(new CompoundTag(), serverLevel.getServer().registryAccess()));
                 for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
                     NETWORK.sendTo(packet, player);
                 }
             }
         }).subscribe();
+        DCPAttachments.DR.register(modEventBus);
     }
 
 
@@ -72,6 +76,7 @@ public class DysonCubeProject extends ModuleController {
     protected void initModules() {
         addCreativeTab("main", () -> new ItemStack(Blocks.DIRT), "dyson_cube_project", DCPContent.TAB);
         DCPContent.Blocks.init();
+        DCPContent.Items.init();
     }
 
     @Override

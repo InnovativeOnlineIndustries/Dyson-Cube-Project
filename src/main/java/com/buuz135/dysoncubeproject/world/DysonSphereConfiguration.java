@@ -7,7 +7,9 @@ import org.jetbrains.annotations.UnknownNullability;
 
 public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
 
-    public static final int MAX_SOLAR_PANELS = 10_000;
+    public static final int MAX_SOLAR_PANELS = 1_000_000;
+    public static final int BEAM_TO_SOLAR_PANEL_RATIO = 4;
+    public static final int POWER_PER_SOLAR_PANEL = 60;
 
     private int beams;
     private int solarPanels;
@@ -38,11 +40,25 @@ public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
     }
 
     public int getMaxSolarPanels() {
-        return beams * 4;
+        return beams * BEAM_TO_SOLAR_PANEL_RATIO;
     }
 
     public double getProgress() {
         return solarPanels / (double) MAX_SOLAR_PANELS;
+    }
+
+    public int getMaxBeams() {
+        return MAX_SOLAR_PANELS / BEAM_TO_SOLAR_PANEL_RATIO;
+    }
+
+    public void increaseBeams(int amount) {
+        this.beams += amount;
+        if (this.beams > getMaxBeams()) this.beams = getMaxBeams();
+    }
+
+    public void increaseSolarPanels(int amount) {
+        this.solarPanels += amount;
+        if (this.solarPanels > getMaxSolarPanels()) this.solarPanels = getMaxSolarPanels();
     }
 
     @Override
