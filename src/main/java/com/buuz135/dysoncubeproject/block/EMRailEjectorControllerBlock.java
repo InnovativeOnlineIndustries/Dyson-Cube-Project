@@ -54,11 +54,15 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         super.setPlacedBy(level, pos, state, placer, stack);
-        if (level instanceof ServerLevel) {
+        if (level instanceof ServerLevel serverLevel) {
             if (placer != null) {
                 var dyson = DysonSphereProgressSavedData.get(level);
-                dyson.getSpheres().computeIfAbsent(placer.getStringUUID(), s -> new DysonSphereConfiguration());
+                var subscribedSphere = dyson.getSubscribedFor(placer.getStringUUID());
+                dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereConfiguration());
                 dyson.setDirty();
+                if (serverLevel.getBlockEntity(pos) instanceof EMRailEjectorBlockEntity blockEntity) {
+                    blockEntity.setDysonSphereId(subscribedSphere);
+                }
             }
             var lowerCorner = pos.offset(-1, 0, -1);
             for (int x = 0; x < 3; x++) {

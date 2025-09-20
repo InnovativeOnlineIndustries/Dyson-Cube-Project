@@ -36,10 +36,11 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
         // Futuristic charging effect: electric arcs around the muzzle just before firing
         if (entity.getLevel() != null) {
             long gameTime = entity.getLevel().getGameTime();
-            float period = 100f; // ticks for full cycle
+            float period = entity.getProgressBarComponent().getMaxProgress(); // ticks for full cycle
             float shootWindow = 24f; // ticks we show the projectile
             float chargeWindow = 35f; // ticks before shot used to show electricity
-            float t = (float) ((gameTime + (double) partialTicks) % period);
+            float t = (float) (entity.getProgressBarComponent().getProgress());
+            // CHARGING ANIMATION
             if (t >= period - chargeWindow) {
                 float chargeT = (t - (period - chargeWindow)) / chargeWindow; // 0..1
                 float intensity = 0 + (float) Math.pow(chargeT, 3.0); // ramp up
@@ -101,8 +102,11 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
                 }
                 poseStack.popPose();
             }
+
+            t = entity.getLevel().getGameTime() - entity.getLastExecution();
+            //AFTER SHOOTING ANIMATION
             float progress = t / shootWindow; // 0..1
-            if (t < shootWindow) {
+            if (t > 0 && t < shootWindow) {
                 // 1) Rail beam: bright cross-shaped beam along barrel
                 if (DCPShaders.RAIL_BEAM != null) {
                     try {
@@ -145,7 +149,7 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
             // 2) Shockwave ring at the muzzle for first few ticks
             if (DCPShaders.RAIL_ELECTRIC != null) {
                 float shockDur = 6.0f;
-                if (t < shockDur) {
+                if (t > 0 && t < shockDur) {
                     try {
                         ShaderInstance shader = DCPShaders.RAIL_ELECTRIC;
                         var uTime = shader.getUniform("uTime");
@@ -179,9 +183,9 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
 
             // Render a small projectile cube shooting out periodically
             if (DCPExtraModels.EM_RAILEJECTOR_PROJECTILE != null) {
-                if (t < shootWindow) {
+                if (t > 0 && t < shootWindow) {
 
-                    float distance = 0.5f + progress * 500f; // blocks from muzzle
+                    float distance = 0.5f + progress * 1000f; // blocks from muzzle
                     poseStack.pushPose();
                     // Move to muzzle area (approximate) in local gun space
                     poseStack.translate(0.75, -0.1, 0);

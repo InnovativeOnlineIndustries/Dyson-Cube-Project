@@ -72,5 +72,7 @@ public class DysonSphereProgressSavedData extends SavedData {
         return subscribedPlayers;
     }
 
-
+    public String getSubscribedFor(String playerUUID) {
+        return subscribedPlayers.getOrDefault(playerUUID, playerUUID);
+    }
 }
