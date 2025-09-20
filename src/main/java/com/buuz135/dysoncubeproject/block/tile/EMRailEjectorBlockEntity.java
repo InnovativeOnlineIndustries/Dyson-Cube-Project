@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
+import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
 import com.hrznstudio.titanium.api.client.IScreenAddon;
@@ -175,9 +176,10 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     @OnlyIn(Dist.CLIENT)
     @Override
     public @NotNull List<IFactory<? extends IScreenAddon>> getScreenAddons() {
-        var list = new ArrayList<IFactory<? extends IScreenAddon>>();
+        List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
         list.addAll(this.progressBarComponent.getScreenAddons());
         list.addAll(this.input.getScreenAddons());
+        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 72, 24));
         return list;
     }
 

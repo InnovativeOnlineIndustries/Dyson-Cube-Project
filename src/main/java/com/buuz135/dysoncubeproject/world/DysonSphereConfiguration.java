@@ -42,7 +42,7 @@ public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
     }
 
     public double getProgress() {
-        return solarPanels / (double) getMaxSolarPanels();
+        return solarPanels / (double) MAX_SOLAR_PANELS;
     }
 
     @Override
