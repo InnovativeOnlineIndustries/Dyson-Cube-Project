@@ -23,6 +23,7 @@ public class ClientSetup {
         EventManager.forge(RenderLevelStageEvent.class).process(SkyRender::onRenderStage).subscribe();
         EventManager.mod(RegisterShadersEvent.class).process(ClientSetup::registerShaders).subscribe();
         EventManager.mod(ModelEvent.BakingCompleted.class).process(event -> {
+            DCPExtraModels.EM_RAILEJECTOR_BASE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_base"), event.getModelBakery());
             DCPExtraModels.EM_RAILEJECTOR_GUN = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_gun"), event.getModelBakery());
             DCPExtraModels.EM_RAILEJECTOR_PROJECTILE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_projectile"), event.getModelBakery());
         }).subscribe();

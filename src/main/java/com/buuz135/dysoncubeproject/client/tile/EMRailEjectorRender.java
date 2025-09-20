@@ -17,6 +17,8 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
     @Override
     public void render(EMRailEjectorBlockEntity entity, float partialTicks, PoseStack poseStack, MultiBufferSource multiBufferSource, int combinedLightIn, int combinedOverlayIn) {
         poseStack.pushPose();
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.solid()), null, DCPExtraModels.EM_RAILEJECTOR_BASE, 255, 255, 255, combinedLightIn, combinedOverlayIn);
+
         poseStack.translate(0, 2.5, 0);
         poseStack.mulPose(Axis.YP.rotationDegrees(-90));
 
