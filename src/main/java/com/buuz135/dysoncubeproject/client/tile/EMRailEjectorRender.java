@@ -99,18 +99,93 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
                 }
                 poseStack.popPose();
             }
+            float progress = t / shootWindow; // 0..1
+            if (t < shootWindow) {
+                // 1) Rail beam: bright cross-shaped beam along barrel
+                if (DCPShaders.RAIL_BEAM != null) {
+                    try {
+                        ShaderInstance shader = DCPShaders.RAIL_BEAM;
+                        var uTime = shader.getUniform("uTime");
+                        if (uTime != null) uTime.set((entity.getLevel().getGameTime() + partialTicks) / 20.0f);
+                        var uInt = shader.getUniform("uIntensity");
+                        // Peak at start, decay over window
+                        float beamIntensity = 1.2f * (1.0f - progress);
+                        if (uInt != null) uInt.set(beamIntensity);
+                    } catch (Throwable ignored) {
+                    }
+
+                    VertexConsumer beam = multiBufferSource.getBuffer(DCPRenderTypes.railBeam());
+                    poseStack.pushPose();
+                    // Muzzle location approximation in local gun space
+                    poseStack.translate(0.12, 0.45, 0.5);
+
+                    float beamLen = 160.0f * ((2.0f - progress * 2)); // very long
+                    float halfW = 0.10f + 0.06f * (1.0f - progress); // width tapers over time
+                    float r = 0.9f, g = 1.0f, b = 1.0f, a = 1.0f;
+
+                    // Quad 1: vertical ribbon (vary Y, Z=0)
+                    // order CCW for front face; culling disabled anyway
+                    beam.addVertex(poseStack.last().pose(), 0.0f, -halfW, 0.0f).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), beamLen, -halfW, 0.0f).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), beamLen, halfW, 0.0f).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), 0.0f, halfW, 0.0f).setColor(r, g, b, a);
+
+                    // Quad 2: horizontal ribbon (vary Z, Y=0)
+                    beam.addVertex(poseStack.last().pose(), 0.0f, 0.0f, -halfW).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), beamLen, 0.0f, -halfW).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), beamLen, 0.0f, halfW).setColor(r, g, b, a);
+                    beam.addVertex(poseStack.last().pose(), 0.0f, 0.0f, halfW).setColor(r, g, b, a);
+
+                    poseStack.popPose();
+                }
+            }
+
+            // 2) Shockwave ring at the muzzle for first few ticks
+            if (DCPShaders.RAIL_ELECTRIC != null) {
+                float shockDur = 6.0f;
+                if (t < shockDur) {
+                    try {
+                        ShaderInstance shader = DCPShaders.RAIL_ELECTRIC;
+                        var uTime = shader.getUniform("uTime");
+                        if (uTime != null) uTime.set((entity.getLevel().getGameTime() + partialTicks) / 20.0f);
+                        var uInt = shader.getUniform("uIntensity");
+                        if (uInt != null) uInt.set(1.0f);
+                    } catch (Throwable ignored) {
+                    }
+
+                    VertexConsumer lines = multiBufferSource.getBuffer(DCPRenderTypes.railElectricLines());
+                    poseStack.pushPose();
+                    poseStack.translate(0.12, 0.45, 0.5);
+                    float radius = 0.2f + 0.9f * (t / shockDur);
+                    int segs = 32;
+                    float rf = 1.0f, gf = 1.0f, bf = 1.0f, af = 1.0f;
+                    for (int depth = 0; depth < 7; depth++) {
+                        for (int i = 0; i < segs; i++) {
+                            double a0 = (Math.PI * 2 * i) / segs;
+                            double a1 = (Math.PI * 2 * (i + 1)) / segs;
+                            float y0 = (float) (Math.cos(a0) * radius);
+                            float z0 = (float) (Math.sin(a0) * radius);
+                            float y1 = (float) (Math.cos(a1) * radius);
+                            float z1 = (float) (Math.sin(a1) * radius);
+                            lines.addVertex(poseStack.last().pose(), depth * 0.5f, y0, z0).setColor(rf, gf, bf, af);
+                            lines.addVertex(poseStack.last().pose(), depth * 0.5f, y1, z1).setColor(rf, gf, bf, af);
+                        }
+                    }
+                    poseStack.popPose();
+                }
+            }
 
             // Render a small projectile cube shooting out periodically
             if (DCPExtraModels.EM_RAILEJECTOR_PROJECTILE != null) {
                 if (t < shootWindow) {
-                    float progress = t / shootWindow; // 0..1
-                    float distance = 0.5f + progress * 100f; // blocks from muzzle
+
+                    float distance = 0.5f + progress * 500f; // blocks from muzzle
                     poseStack.pushPose();
                     // Move to muzzle area (approximate) in local gun space
                     poseStack.translate(0.75, -0.1, 0);
                     // Move forward along barrel direction (local +X)
                     poseStack.translate(distance, 0, 0);
-                    // Slight scale wobble could be added; model is already small (2/16 block)
+                    // Render small cube projectile
                     Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(
                             poseStack.last(),
                             multiBufferSource.getBuffer(RenderType.solid()),
@@ -120,6 +195,32 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
                             combinedLightIn,
                             combinedOverlayIn
                     );
+
+                    // Additive glow sprite using rail beam shader (if available)
+                    if (DCPShaders.RAIL_BEAM != null) {
+                        try {
+                            ShaderInstance shader = DCPShaders.RAIL_BEAM;
+                            var uTime = shader.getUniform("uTime");
+                            if (uTime != null) uTime.set((entity.getLevel().getGameTime() + partialTicks) / 20.0f);
+                            var uInt = shader.getUniform("uIntensity");
+                            if (uInt != null) uInt.set(1.2f);
+                        } catch (Throwable ignored) {
+                        }
+                        VertexConsumer glow = multiBufferSource.getBuffer(DCPRenderTypes.railBeam());
+                        float s = 0.18f; // half size
+                        float r = 0.9f, g = 1.0f, b = 1.0f, a = 1.0f;
+                        // Two tiny cross quads centered at the projectile
+                        glow.addVertex(poseStack.last().pose(), -s, -s, 0.0f).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), s, -s, 0.0f).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), s, s, 0.0f).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), -s, s, 0.0f).setColor(r, g, b, a);
+
+                        glow.addVertex(poseStack.last().pose(), -s, 0.0f, -s).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), s, 0.0f, -s).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), s, 0.0f, s).setColor(r, g, b, a);
+                        glow.addVertex(poseStack.last().pose(), -s, 0.0f, s).setColor(r, g, b, a);
+                    }
+
                     poseStack.popPose();
                 }
             }

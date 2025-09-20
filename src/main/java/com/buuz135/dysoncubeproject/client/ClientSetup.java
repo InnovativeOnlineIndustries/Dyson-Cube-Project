@@ -52,6 +52,13 @@ public class ClientSetup {
         } catch (Exception e) {
             DCPShaders.RAIL_ELECTRIC = null;
         }
+        // Register Rail Beam shader
+        try {
+            ShaderInstance shader = new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "rail_beam"), DefaultVertexFormat.POSITION_COLOR);
+            event.registerShader(shader, s -> DCPShaders.RAIL_BEAM = s);
+        } catch (Exception e) {
+            DCPShaders.RAIL_BEAM = null;
+        }
     }
 
     private static BakedModel bakeModel(ResourceLocation model, ModelBakery modelBakery) {

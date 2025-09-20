@@ -10,6 +10,7 @@ public class DCPRenderTypes {
     private static RenderType DYSON_SUN;
     private static RenderType HOLOGRAM;
     private static RenderType RAIL_ELECTRIC_LINES;
+    private static RenderType RAIL_BEAM;
 
     public static RenderType dysonSun() {
         if (DYSON_SUN == null) {
@@ -62,12 +63,32 @@ public class DCPRenderTypes {
                     .createCompositeState(true);
             RAIL_ELECTRIC_LINES = RenderType.create("dysoncubeproject_rail_electric_lines",
                     DefaultVertexFormat.POSITION_COLOR,
-                    VertexFormat.Mode.LINES,
+                    VertexFormat.Mode.QUADS,
                     256,
                     false,
                     true,
                     state);
         }
         return RAIL_ELECTRIC_LINES;
+    }
+
+    public static RenderType railBeam() {
+        if (RAIL_BEAM == null) {
+            RenderType.CompositeState state = RenderType.CompositeState.builder()
+                    .setShaderState(new RenderStateShard.ShaderStateShard(() -> DCPShaders.RAIL_BEAM))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setDepthTestState(RenderStateShard.LEQUAL_DEPTH_TEST)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                    .createCompositeState(true);
+            RAIL_BEAM = RenderType.create("dysoncubeproject_rail_beam",
+                    DefaultVertexFormat.POSITION_COLOR,
+                    VertexFormat.Mode.QUADS,
+                    256,
+                    false,
+                    true,
+                    state);
+        }
+        return RAIL_BEAM;
     }
 }

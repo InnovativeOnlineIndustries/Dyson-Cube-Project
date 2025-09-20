@@ -6,8 +6,8 @@
     128
   ],
   "textures": {
-    "2": "dysoncubeproject:block/cannon3",
-    "particle": "dysoncubeproject:block/cannon"
+    "2": "dysoncubeproject:block/em_railejector_controller",
+    "particle": "dysoncubeproject:block/em_railejector_controller"
   },
   "elements": [
     {

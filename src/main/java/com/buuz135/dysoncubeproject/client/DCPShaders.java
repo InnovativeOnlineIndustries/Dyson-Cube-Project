@@ -6,4 +6,5 @@ public class DCPShaders {
     public static ShaderInstance HOLOGRAM;
     public static ShaderInstance DYSON_SUN;
     public static ShaderInstance RAIL_ELECTRIC;
+    public static ShaderInstance RAIL_BEAM;
 }
