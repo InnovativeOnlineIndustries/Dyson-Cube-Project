@@ -66,10 +66,10 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
             syncObject(this.progressBarComponent);
         }).setOnFinishWork(this::onFinishWork).setIncreaseType(true).setComponentHarness(this).setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).setColor(DyeColor.CYAN);
         this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 18, 42, 1).setSlotToColorRender(0, DyeColor.CYAN);
-        this.currentYaw = 0;
-        this.currentPitch = 0;
-        this.targetYaw = 0; //HORIZONTAL
-        this.targetPitch = 0; //VERTICAL
+        this.currentYaw = 180;
+        this.currentPitch = 90;
+        this.targetYaw = 180; //HORIZONTAL
+        this.targetPitch = 90; //VERTICAL
         this.lastExecution = 0;
         this.dysonSphereId = "";
     }

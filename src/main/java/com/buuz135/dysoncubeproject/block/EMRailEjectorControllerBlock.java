@@ -37,7 +37,7 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
     public EMRailEjectorControllerBlock() {
-        super("em_railejector_controller", Properties.ofFullCopy(Blocks.IRON_BLOCK), EMRailEjectorBlockEntity.class);
+        super("em_railejector_controller.json", Properties.ofFullCopy(Blocks.IRON_BLOCK), EMRailEjectorBlockEntity.class);
     }
 
     @Override
