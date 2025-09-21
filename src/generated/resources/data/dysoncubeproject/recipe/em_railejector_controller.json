@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "dysoncubeproject:em_railejector_controller"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "dysoncubeproject:beam"
+    },
+    "C": {
+      "tag": "c:storage_blocks/copper"
+    },
+    "D": {
+      "tag": "c:gems/diamond"
+    },
+    "R": {
+      "tag": "c:dusts/redstone"
+    },
+    "S": {
+      "item": "minecraft:smooth_stone_slab"
+    }
+  },
+  "pattern": [
+    "DRB",
+    "RCB",
+    "SSS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dysoncubeproject:em_railejector_controller"
+  }
+}

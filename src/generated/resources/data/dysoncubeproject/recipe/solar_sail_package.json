@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "dysoncubeproject:solar_sail_package"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "dysoncubeproject:solar_sail"
+    },
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "GIG",
+    "GGG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dysoncubeproject:solar_sail_package"
+  }
+}

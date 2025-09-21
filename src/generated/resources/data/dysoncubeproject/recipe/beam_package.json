@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "dysoncubeproject:beam_package"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "dysoncubeproject:beam"
+    },
+    "I": {
+      "tag": "c:storage_blocks/copper"
+    }
+  },
+  "pattern": [
+    "GGG",
+    "GIG",
+    "GGG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dysoncubeproject:beam_package"
+  }
+}

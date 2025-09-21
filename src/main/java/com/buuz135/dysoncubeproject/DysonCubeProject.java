@@ -3,6 +3,7 @@ package com.buuz135.dysoncubeproject;
 import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
 import com.buuz135.dysoncubeproject.datagen.DCPLangItemProvider;
+import com.buuz135.dysoncubeproject.datagen.DCPRecipesProvider;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -46,6 +47,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+
 
 @Mod(DysonCubeProject.MODID)
 public class DysonCubeProject extends ModuleController {
@@ -85,5 +88,6 @@ public class DysonCubeProject extends ModuleController {
         super.addDataProvider(event);
         event.addProvider(new DCPBlockstateProvider(event.getGenerator(), MODID, event.getExistingFileHelper()));
         event.addProvider(new DCPLangItemProvider(event.getGenerator(), MODID, "en_us"));
+        event.addProvider(new DCPRecipesProvider(event.getGenerator(), () -> new ArrayList<>(), event.getLookupProvider()));
     }
 }
