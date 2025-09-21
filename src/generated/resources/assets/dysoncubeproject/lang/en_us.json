@@ -1,0 +1,9 @@
+{
+  "block.dysoncubeproject.em_railejector_controller": "EM Rail Ejector Controller",
+  "block.dysoncubeproject.multiblock_structure": "Multiblock Structure",
+  "item.dysoncubeproject.beam": "Beam",
+  "item.dysoncubeproject.beam_package": "Beam Package",
+  "item.dysoncubeproject.solar_sail": "Solar Sail",
+  "item.dysoncubeproject.solar_sail_package": "Solar Sail Package",
+  "itemGroup.dyson_cube_project": "Dyson Cube Project"
+}

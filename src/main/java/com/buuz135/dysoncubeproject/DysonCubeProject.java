@@ -2,6 +2,7 @@ package com.buuz135.dysoncubeproject;
 
 import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
+import com.buuz135.dysoncubeproject.datagen.DCPLangItemProvider;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.event.handler.EventManager;
@@ -74,7 +75,7 @@ public class DysonCubeProject extends ModuleController {
 
     @Override
     protected void initModules() {
-        addCreativeTab("main", () -> new ItemStack(Blocks.DIRT), "dyson_cube_project", DCPContent.TAB);
+        addCreativeTab("main", () -> new ItemStack(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER), "dyson_cube_project", DCPContent.TAB);
         DCPContent.Blocks.init();
         DCPContent.Items.init();
     }
@@ -83,5 +84,6 @@ public class DysonCubeProject extends ModuleController {
     public void addDataProvider(GatherDataEvent event) {
         super.addDataProvider(event);
         event.addProvider(new DCPBlockstateProvider(event.getGenerator(), MODID, event.getExistingFileHelper()));
+        event.addProvider(new DCPLangItemProvider(event.getGenerator(), MODID, "en_us"));
     }
 }
