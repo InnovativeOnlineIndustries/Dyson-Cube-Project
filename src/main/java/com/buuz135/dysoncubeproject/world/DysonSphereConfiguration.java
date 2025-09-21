@@ -7,9 +7,9 @@ import org.jetbrains.annotations.UnknownNullability;
 
 public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
 
-    public static final int MAX_SOLAR_PANELS = 1_000_000;
-    public static final int BEAM_TO_SOLAR_PANEL_RATIO = 4;
-    public static final int POWER_PER_SOLAR_PANEL = 60;
+    public static final int MAX_SOLAR_PANELS = 50_000_000;
+    public static final int BEAM_TO_SOLAR_PANEL_RATIO = 6;
+    public static final int POWER_PER_SOLAR_PANEL = 20;
 
     private int beams;
     private int solarPanels;
