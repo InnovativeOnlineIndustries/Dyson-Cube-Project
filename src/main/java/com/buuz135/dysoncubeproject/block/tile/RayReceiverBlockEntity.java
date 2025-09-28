@@ -1,0 +1,157 @@
+package com.buuz135.dysoncubeproject.block.tile;
+
+import com.buuz135.dysoncubeproject.DCPAttachments;
+import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
+import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
+import com.hrznstudio.titanium.annotation.Save;
+import com.hrznstudio.titanium.api.IFactory;
+import com.hrznstudio.titanium.api.client.IScreenAddon;
+import com.hrznstudio.titanium.api.client.IScreenAddonProvider;
+import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.block.tile.BasicTile;
+import com.hrznstudio.titanium.block.tile.ITickableBlockEntity;
+import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
+import com.hrznstudio.titanium.client.screen.asset.IHasAssetProvider;
+import com.hrznstudio.titanium.component.IComponentHarness;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
+import com.hrznstudio.titanium.component.inventory.InventoryComponent;
+import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
+import com.hrznstudio.titanium.container.BasicAddonContainer;
+import com.hrznstudio.titanium.container.addon.IContainerAddon;
+import com.hrznstudio.titanium.container.addon.IContainerAddonProvider;
+import com.hrznstudio.titanium.network.IButtonHandler;
+import com.hrznstudio.titanium.network.locator.LocatorFactory;
+import com.hrznstudio.titanium.network.locator.instance.TileEntityLocatorInstance;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> implements IScreenAddonProvider, ITickableBlockEntity<RayReceiverBlockEntity>, MenuProvider, IButtonHandler, IContainerAddonProvider, IHasAssetProvider, IComponentHarness {
+
+    public static int EXTRACT_POWER = 512_000;
+
+    @Save
+    private String dysonSphereId;
+    @Save
+    private EnergyStorageComponent<RayReceiverBlockEntity> energyStorageComponent;
+
+    public RayReceiverBlockEntity(BasicTileBlock<RayReceiverBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
+        super(base, blockEntityType, pos, state);
+        this.dysonSphereId = "";
+        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 20, 20);
+    }
+
+
+    @Override
+    public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
+        //TODO CHECK IF DAY
+        var dyson = DysonSphereProgressSavedData.get(level);
+        var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
+        var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration()).extractPower(extractingAmount);
+        this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
+    }
+
+    @Override
+    public void clientTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
+
+    }
+
+    @Override
+    public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
+        openGui(player);
+        return super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+    }
+
+    public void openGui(Player player) {
+        if (player instanceof ServerPlayer sp) {
+            sp.openMenu(this, (buffer) -> LocatorFactory.writePacketBuffer(buffer, new TileEntityLocatorInstance(this.worldPosition)));
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @Override
+    public @NotNull List<IFactory<? extends IScreenAddon>> getScreenAddons() {
+        List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
+        list.addAll(this.energyStorageComponent.getScreenAddons());
+        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 64, 24));
+        return list;
+    }
+
+    @Override
+    public IAssetProvider getAssetProvider() {
+        return IAssetProvider.DEFAULT_PROVIDER;
+    }
+
+    @Override
+    public @NotNull List<IFactory<? extends IContainerAddon>> getContainerAddons() {
+        var list = new ArrayList<IFactory<? extends IContainerAddon>>();
+        list.addAll(this.energyStorageComponent.getContainerAddons());
+        return list;
+    }
+
+    @Override
+    public void handleButtonMessage(int i, Player player, CompoundTag compoundTag) {
+
+    }
+
+    @Nullable
+    public AbstractContainerMenu createMenu(int menu, Inventory inventoryPlayer, Player entityPlayer) {
+        return new BasicAddonContainer(this, new TileEntityLocatorInstance(this.worldPosition), this.getWorldPosCallable(), inventoryPlayer, menu);
+    }
+
+    @Nonnull
+    public Component getDisplayName() {
+        return Component.translatable(this.getBasicTileBlock().getDescriptionId()).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY));
+    }
+
+    public ContainerLevelAccess getWorldPosCallable() {
+        return this.getLevel() != null ? ContainerLevelAccess.create(this.getLevel(), this.getBlockPos()) : ContainerLevelAccess.NULL;
+    }
+
+    @Override
+    public Level getComponentWorld() {
+        return this.level;
+    }
+
+    @Override
+    public void markComponentForUpdate(boolean b) {
+        this.markForUpdate();
+    }
+
+    @Override
+    public void markComponentDirty() {
+        this.markForUpdate();
+    }
+
+    public String getDysonSphereId() {
+        return dysonSphereId;
+    }
+
+    public void setDysonSphereId(String dysonSphereId) {
+        this.dysonSphereId = dysonSphereId;
+    }
+}

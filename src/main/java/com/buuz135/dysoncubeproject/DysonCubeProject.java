@@ -5,6 +5,7 @@ import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
 import com.buuz135.dysoncubeproject.datagen.DCPLangItemProvider;
 import com.buuz135.dysoncubeproject.datagen.DCPRecipesProvider;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
+import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
@@ -64,12 +65,17 @@ public class DysonCubeProject extends ModuleController {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if (dist == Dist.CLIENT) ClientSetup.init();
 
-        EventManager.forge(LevelTickEvent.Post.class).process(post -> {
-            if (post.getLevel() instanceof ServerLevel serverLevel && serverLevel.dimensionTypeRegistration().getRegisteredName().equals(BuiltinDimensionTypes.OVERWORLD.location().toString()) && post.getLevel().getGameTime() % 20 == 0) {
-                var packet = new DysonSphereSyncMessage(DysonSphereProgressSavedData.get(serverLevel).save(new CompoundTag(), serverLevel.getServer().registryAccess()));
-                for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
-                    NETWORK.sendTo(packet, player);
+        EventManager.forge(LevelTickEvent.Pre.class).process(post -> {
+            if (post.getLevel() instanceof ServerLevel serverLevel && serverLevel.dimensionTypeRegistration().getRegisteredName().equals(BuiltinDimensionTypes.OVERWORLD.location().toString())) {
+                var data = DysonSphereProgressSavedData.get(serverLevel);
+                if (post.getLevel().getGameTime() % 4 == 0) {
+                    var packet = new DysonSphereSyncMessage(data.save(new CompoundTag(), serverLevel.getServer().registryAccess()));
+                    for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
+                        NETWORK.sendTo(packet, player);
+                    }
                 }
+                data.getSpheres().values().forEach(DysonSphereConfiguration::generatePower);
+                data.setDirty();
             }
         }).subscribe();
         DCPAttachments.DR.register(modEventBus);

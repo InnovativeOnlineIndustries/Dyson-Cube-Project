@@ -44,7 +44,7 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.BLUE + "Power Gen: " + NumberUtils.getFormatedBigNumber(dyson.getSolarPanels() * DysonSphereConfiguration.POWER_PER_SOLAR_PANEL) + "FE", this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
-        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.BLUE + "Power Con: " + NumberUtils.getFormatedBigNumber(0) + "FE", this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.BLUE + "Power Con: " + NumberUtils.getFormatedBigNumber(dyson.getLastConsumedPower()) + "FE", this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, ChatFormatting.BLUE + "Beams: " + NumberUtils.getFormatedBigNumber(dyson.getBeams()), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;

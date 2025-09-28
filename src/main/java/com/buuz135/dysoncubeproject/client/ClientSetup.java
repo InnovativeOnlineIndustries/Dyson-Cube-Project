@@ -46,6 +46,13 @@ public class ClientSetup {
         } catch (Exception e) {
             DCPShaders.DYSON_SUN = null;
         }
+        // Register Holographic Hex shader
+        try {
+            ShaderInstance shader = new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "holo_hex"), DefaultVertexFormat.POSITION_COLOR);
+            event.registerShader(shader, s -> DCPShaders.HOLO_HEX = s);
+        } catch (Exception e) {
+            DCPShaders.HOLO_HEX = null;
+        }
         // Register Rail Electric shader
         try {
             ShaderInstance shader = new ShaderInstance(event.getResourceProvider(), ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "rail_electric"), DefaultVertexFormat.POSITION_COLOR);

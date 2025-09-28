@@ -2,7 +2,7 @@ package com.buuz135.dysoncubeproject.block;
 
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
-import com.buuz135.dysoncubeproject.block.tile.MultiblockStructureBlockEntity;
+import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
-public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlock<EMRailEjectorBlockEntity> {
+public class RayReceiverControllerBlock extends DefaultMultiblockControllerBlock<RayReceiverBlockEntity> {
 
     public static MultiblockStructure MULTIBLOCK_STRUCTURE = new MultiblockStructure(3, 3, 3);
     public static VoxelShape SHAPE = Stream.of(
@@ -36,8 +36,8 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
             Block.box(2, 12, 2, 14, 32, 14)
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
 
-    public EMRailEjectorControllerBlock() {
-        super("em_railejector_controller", Properties.ofFullCopy(Blocks.IRON_BLOCK), EMRailEjectorBlockEntity.class);
+    public RayReceiverControllerBlock() {
+        super("em_railejector_controller.json", Properties.ofFullCopy(Blocks.IRON_BLOCK), RayReceiverBlockEntity.class);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
     @Override
     public BlockEntityType.BlockEntitySupplier<?> getTileEntityFactory() {
         return (blockPos, blockState) ->
-                new EMRailEjectorBlockEntity((BasicTileBlock<EMRailEjectorBlockEntity>) DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.getBlock(), DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.type().get(), blockPos, blockState);
+                new RayReceiverBlockEntity((BasicTileBlock<RayReceiverBlockEntity>) DCPContent.Blocks.RAY_RECEIVER.getBlock(), DCPContent.Blocks.RAY_RECEIVER.type().get(), blockPos, blockState);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
                 var subscribedSphere = dyson.getSubscribedFor(placer.getStringUUID());
                 dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereConfiguration());
                 dyson.setDirty();
-                if (serverLevel.getBlockEntity(pos) instanceof EMRailEjectorBlockEntity blockEntity) {
+                if (serverLevel.getBlockEntity(pos) instanceof RayReceiverBlockEntity blockEntity) {
                     blockEntity.setDysonSphereId(subscribedSphere);
                 }
                 dyson.setDirty();

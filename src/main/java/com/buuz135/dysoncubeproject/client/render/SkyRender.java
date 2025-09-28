@@ -25,7 +25,7 @@ public class SkyRender {
 
         if (sphere == null) return;
         var progress = (float) sphere.getProgress();
-
+        progress = 1f;
         PoseStack pose = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
 
@@ -33,7 +33,7 @@ public class SkyRender {
 
         if (DCPShaders.DYSON_SUN != null) {
             // Update custom uniforms for the shader
-            ShaderInstance shader = DCPShaders.DYSON_SUN;
+            ShaderInstance shader = DCPShaders.HOLO_HEX;
 
             try {
 
@@ -41,12 +41,14 @@ public class SkyRender {
                 if (uTime != null) uTime.set((Minecraft.getInstance().level.getGameTime() % 100000) / 20.0f);
                 var uValid = shader.getUniform("uValid");
                 if (uValid != null) uValid.set(true ? 1.0f : 0.0f);
+                var uSize = shader.getUniform("uSize");
+                if (uSize != null) uSize.set(25f);
             } catch (Throwable ignored) {
             }
 
 
             pose.pushPose();
-            pose.mulPose(event.getModelViewMatrix());
+            //pose.mulPose(event.getModelViewMatrix());
             pose.mulPose(Axis.YP.rotationDegrees(-90.0F));
             pose.mulPose(Axis.XP.rotationDegrees(90));
             pose.mulPose(Axis.XP.rotationDegrees(skyAngle));
@@ -55,9 +57,9 @@ public class SkyRender {
 
             // Build a square in local XY plane; shader expects half-extent ~30 (it divides by 60.0 for UV)
             float s = 30.0f;
-            float r = 1.0f, g = 1.0f, b = 1.0f, a = 1.0f;
+            float r = 0.5f, g = 0.9f, b = 0.9f, a = 0.7f;
 
-            VertexConsumer vc = buffer.getBuffer(DCPRenderTypes.dysonSun());
+            VertexConsumer vc = buffer.getBuffer(DCPRenderTypes.holoHex());
 
             // Quad (counter-clockwise) at z=0 in local space after transformations
             emit(vc, pose, 0, s, 0.0f, r, g, b, a);

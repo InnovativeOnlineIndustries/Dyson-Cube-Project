@@ -2,6 +2,7 @@ package com.buuz135.dysoncubeproject;
 
 import com.buuz135.dysoncubeproject.block.EMRailEjectorControllerBlock;
 import com.buuz135.dysoncubeproject.block.MultiblockStructureBlock;
+import com.buuz135.dysoncubeproject.block.RayReceiverControllerBlock;
 import com.buuz135.dysoncubeproject.item.DysonComponentItem;
 import com.hrznstudio.titanium.module.BlockWithTile;
 import com.hrznstudio.titanium.module.DeferredRegistryHelper;
@@ -20,6 +21,7 @@ public class DCPContent {
 
         public static BlockWithTile MULTIBLOCK_STRUCTURE = REGISTRY.registerBlockWithTile("multiblock_structure", MultiblockStructureBlock::new, TAB);
         public static BlockWithTile EM_RAILEJECTOR_CONTROLLER = REGISTRY.registerBlockWithTile("em_railejector_controller", EMRailEjectorControllerBlock::new, TAB);
+        public static BlockWithTile RAY_RECEIVER = REGISTRY.registerBlockWithTile("ray_receiver", RayReceiverControllerBlock::new, TAB);
 
         public static void init() {
         }
