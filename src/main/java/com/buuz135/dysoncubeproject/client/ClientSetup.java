@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.client;
 
+import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.DysonCubeProject;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
@@ -11,10 +12,14 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.resources.model.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.SimpleModelState;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+
+import java.awt.*;
 
 public class ClientSetup {
 
@@ -29,6 +34,17 @@ public class ClientSetup {
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
             event.registerBlockEntityRenderer((BlockEntityType<? extends EMRailEjectorBlockEntity>) DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.type().get(), context -> new EMRailEjectorRender());
+        }).subscribe();
+        EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
+            var stack = itemTooltipEvent.getItemStack();
+            if (stack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) > 0) {
+                itemTooltipEvent.getToolTip().add(Component.literal("Contains " + stack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) + " solar sail(s)")
+                        .withColor(DCPContent.CYAN_COLOR));
+            }
+            if (stack.getOrDefault(DCPAttachments.BEAM, 0) > 0) {
+                itemTooltipEvent.getToolTip().add(Component.literal("Contains " + stack.getOrDefault(DCPAttachments.BEAM, 0) + " beam(s)")
+                        .withColor(DCPContent.CYAN_COLOR));
+            }
         }).subscribe();
     }
 

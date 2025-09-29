@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.client.gui;
 
+import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.util.NumberUtils;
 import com.buuz135.dysoncubeproject.world.ClientDysonSphere;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
@@ -55,12 +56,12 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
             ++y;
         }
 
-        var color = 0xFF000000 | DyeColor.CYAN.getTextColor();
+
         Rectangle area = new Rectangle(this.getPosX() + guiX - 4, this.getPosY() + guiY - 4, 108, Minecraft.getInstance().font.lineHeight * y + 4);
-        AssetUtil.drawHorizontalLine(guiGraphics, area.x, area.x + area.width, area.y, color);
-        AssetUtil.drawHorizontalLine(guiGraphics, area.x, area.x + area.width, area.y + area.height, color);
-        AssetUtil.drawVerticalLine(guiGraphics, area.x, area.y, area.y + area.height, color);
-        AssetUtil.drawVerticalLine(guiGraphics, area.x + area.width, area.y, area.y + area.height, color);
+        AssetUtil.drawHorizontalLine(guiGraphics, area.x, area.x + area.width, area.y, DCPContent.CYAN_COLOR);
+        AssetUtil.drawHorizontalLine(guiGraphics, area.x, area.x + area.width, area.y + area.height, DCPContent.CYAN_COLOR);
+        AssetUtil.drawVerticalLine(guiGraphics, area.x, area.y, area.y + area.height, DCPContent.CYAN_COLOR);
+        AssetUtil.drawVerticalLine(guiGraphics, area.x + area.width, area.y, area.y + area.height, DCPContent.CYAN_COLOR);
 
 
     }

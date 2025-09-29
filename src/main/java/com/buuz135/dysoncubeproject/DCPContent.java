@@ -16,6 +16,7 @@ public class DCPContent {
 
     public static DeferredRegistryHelper REGISTRY = new DeferredRegistryHelper(DysonCubeProject.MODID);
     public static TitaniumTab TAB = new TitaniumTab(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "main"));
+    public static int CYAN_COLOR = 0xFF80E6E6;
 
     public static class Blocks {
 
