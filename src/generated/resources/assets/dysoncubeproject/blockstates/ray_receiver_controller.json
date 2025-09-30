@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dysoncubeproject:block/ray_receiver_controller"
+    }
+  }
+}

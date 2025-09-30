@@ -21,6 +21,7 @@ public class DCPLangItemProvider extends LanguageProvider {
     protected void addTranslations() {
         this.add("itemGroup.dyson_cube_project", "Dyson Cube Project");
         this.add(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.asItem(), "EM Rail Ejector Controller");
+        this.add(DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.asItem(), "Ray Receiver Controller");
         formatItem(DCPContent.Blocks.MULTIBLOCK_STRUCTURE.asItem());
         formatItem(DCPContent.Items.BEAM.get());
         formatItem(DCPContent.Items.BEAM_PACKAGE.get());

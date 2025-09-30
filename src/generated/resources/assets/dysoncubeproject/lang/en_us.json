@@ -1,6 +1,7 @@
 {
   "block.dysoncubeproject.em_railejector_controller": "EM Rail Ejector Controller",
   "block.dysoncubeproject.multiblock_structure": "Multiblock Structure",
+  "block.dysoncubeproject.ray_receiver_controller": "Ray Receiver Controller",
   "item.dysoncubeproject.beam": "Beam",
   "item.dysoncubeproject.beam_package": "Beam Package",
   "item.dysoncubeproject.solar_sail": "Solar Sail",

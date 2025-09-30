@@ -1,6 +1,9 @@
 package com.buuz135.dysoncubeproject.client.tile;
 
+import com.buuz135.dysoncubeproject.block.EMRailEjectorControllerBlock;
+import com.buuz135.dysoncubeproject.block.RayReceiverControllerBlock;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
+import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.client.DCPExtraModels;
 import com.buuz135.dysoncubeproject.client.DCPRenderTypes;
 import com.buuz135.dysoncubeproject.client.DCPShaders;
@@ -12,6 +15,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.world.phys.AABB;
 
 public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlockEntity> {
     @Override
@@ -233,5 +237,10 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
         }
 
         poseStack.popPose();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(EMRailEjectorBlockEntity blockEntity) {
+        return EMRailEjectorControllerBlock.MULTIBLOCK_STRUCTURE.getAABB(blockEntity.getBlockPos());
     }
 }

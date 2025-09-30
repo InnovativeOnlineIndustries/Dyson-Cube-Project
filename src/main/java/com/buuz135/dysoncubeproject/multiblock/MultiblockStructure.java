@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
 
 public class MultiblockStructure {
 
@@ -48,8 +49,8 @@ public class MultiblockStructure {
         return true;
     }
 
-    public void build(Level level, BlockPos pos, Block controller) {
-
+    public AABB getAABB(BlockPos anchor) {
+        return new AABB(anchor.getX() - sizeX, anchor.getY(), anchor.getZ() - sizeZ, anchor.getX() + sizeX, anchor.getY() + sizeY, anchor.getZ() + sizeZ);
     }
 
 }

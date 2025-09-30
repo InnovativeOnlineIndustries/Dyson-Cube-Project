@@ -22,7 +22,7 @@ public class DCPContent {
 
         public static BlockWithTile MULTIBLOCK_STRUCTURE = REGISTRY.registerBlockWithTile("multiblock_structure", MultiblockStructureBlock::new, TAB);
         public static BlockWithTile EM_RAILEJECTOR_CONTROLLER = REGISTRY.registerBlockWithTile("em_railejector_controller", EMRailEjectorControllerBlock::new, TAB);
-        public static BlockWithTile RAY_RECEIVER = REGISTRY.registerBlockWithTile("ray_receiver", RayReceiverControllerBlock::new, TAB);
+        public static BlockWithTile RAY_RECEIVER_CONTROLLER = REGISTRY.registerBlockWithTile("ray_receiver_controller", RayReceiverControllerBlock::new, TAB);
 
         public static void init() {
         }

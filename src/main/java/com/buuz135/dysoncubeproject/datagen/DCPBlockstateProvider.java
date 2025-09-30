@@ -24,6 +24,7 @@ public class DCPBlockstateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         simpleBlock(DCPContent.Blocks.MULTIBLOCK_STRUCTURE.block().get(), getUncheckedModel(DCPContent.Blocks.MULTIBLOCK_STRUCTURE.block().get()));
         simpleBlock(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.block().get(), getUncheckedModel(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.block().get()));
+        simpleBlock(DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.block().get(), getUncheckedModel(DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.block().get()));
     }
 
     public static ModelFile.UncheckedModelFile getUncheckedModel(Block block) {

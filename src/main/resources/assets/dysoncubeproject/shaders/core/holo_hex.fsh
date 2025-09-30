@@ -2,7 +2,6 @@
 
 in vec4 vColor;
 in vec3 vWorldPos;// compatibility
-in vec3 vViewPos;// view-space position so the pattern faces the camera
 
 out vec4 fragColor;
 
@@ -82,8 +81,7 @@ float beehive_dist(vec2 p) {
 
 void main(){
 
-    // Use world-space anchored coordinates so the pattern does NOT follow the view
-    // Recover true world position from CPU-fed coords plus camera offset
+    // Recover true world-space position: CPU feeds camera-relative coords, add camera position
     vec3 worldPos = vWorldPos + uCamPos;
 
     // Choose UV plane based on the dominant surface facing using geometric normal
@@ -112,11 +110,7 @@ void main(){
     vec4 p = beehive_center(uv * scaleUV);
 
     vec4 b = fract(
-    vec4(
-    uv * scaleUV - p.xy - vec2(0.5, 0.57735),
-    vec2(1.0, 1.1547)
-    ) / (scaleUV.xyxy)
-    );
+    vec4(uv * scaleUV - p.xy - vec2(0.5, 0.57735), vec2(1.0, 1.1547)) / (scaleUV.xyxy));
 
     // Random cell offset 
     float randOffset = hash(p.zw) * 90.0;

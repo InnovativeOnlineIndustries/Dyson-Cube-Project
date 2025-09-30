@@ -4,9 +4,11 @@ import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.DysonCubeProject;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
+import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.client.render.HologramRender;
 import com.buuz135.dysoncubeproject.client.render.SkyRender;
 import com.buuz135.dysoncubeproject.client.tile.EMRailEjectorRender;
+import com.buuz135.dysoncubeproject.client.tile.RayReceiverRender;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.math.Transformation;
@@ -19,8 +21,6 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.model.SimpleModelState;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
-import java.awt.*;
-
 public class ClientSetup {
 
     public static void init() {
@@ -31,9 +31,12 @@ public class ClientSetup {
             DCPExtraModels.EM_RAILEJECTOR_BASE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_base"), event.getModelBakery());
             DCPExtraModels.EM_RAILEJECTOR_GUN = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_gun"), event.getModelBakery());
             DCPExtraModels.EM_RAILEJECTOR_PROJECTILE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_projectile"), event.getModelBakery());
+            DCPExtraModels.RAY_RECEIVER_BASE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_base"), event.getModelBakery());
+            DCPExtraModels.RAY_RECEIVER_PLATE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_plate"), event.getModelBakery());
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
             event.registerBlockEntityRenderer((BlockEntityType<? extends EMRailEjectorBlockEntity>) DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.type().get(), context -> new EMRailEjectorRender());
+            event.registerBlockEntityRenderer((BlockEntityType<? extends RayReceiverBlockEntity>) DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.type().get(), context -> new RayReceiverRender());
         }).subscribe();
         EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
             var stack = itemTooltipEvent.getItemStack();
