@@ -1,6 +1,7 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
 import com.buuz135.dysoncubeproject.DCPAttachments;
+import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
@@ -25,12 +26,16 @@ import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.TileEntityLocatorInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -64,10 +69,11 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     private InventoryComponent<EMRailEjectorBlockEntity> input;
     @Save
     private String dysonSphereId;
+    private int cooldown;
 
     public EMRailEjectorBlockEntity(BasicTileBlock<EMRailEjectorBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
-        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 8, 42, 100).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
+        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 8, 42, 120).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
             syncObject(this.progressBarComponent);
         }).setOnFinishWork(this::onFinishWork).setIncreaseType(true).setComponentHarness(this).setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).setColor(DyeColor.CYAN);
         this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 10, 42, 1)
@@ -79,9 +85,11 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         this.targetPitch = 90; //VERTICAL
         this.lastExecution = 0;
         this.dysonSphereId = "";
+        this.cooldown = 0;
     }
 
     private boolean canIncrease() {
+        if (this.cooldown > 0) return false;
         if (this.input.getStackInSlot(0).isEmpty()) return false;
         if (this.getLevel().isRaining() || this.getLevel().isNight()) return false;
         var time = level.getTimeOfDay(1f) * 360f;
@@ -104,7 +112,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
         this.input.getStackInSlot(0).shrink(1);
         this.lastExecution = this.getLevel().getGameTime();
-
+        this.cooldown = 30;
         dyson.increaseBeams(beams);
         dyson.increaseSolarPanels(solarPanels);
         data.setDirty();
@@ -123,9 +131,13 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
             }
 
             progressBarComponent.tickBar();
+
+
         } else if (progressBarComponent.getCanReset().test(progressBarComponent.getComponentHarness())) {
             progressBarComponent.setProgress(progressBarComponent.getIncreaseType() ? 0 : progressBarComponent.getMaxProgress());
         }
+
+        if (this.cooldown > 0) this.cooldown--;
 
         this.targetPitch = level.getTimeOfDay(1f) * 360f;
         //this.targetPitch = 300;
@@ -171,7 +183,9 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
 
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, EMRailEjectorBlockEntity blockEntity) {
-
+        if (level instanceof ClientLevel clientLevel && progressBarComponent.getProgress() == 7) {
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(DCPContent.Sounds.RAILGUN.get(), SoundSource.BLOCKS, 1, 1, level.getRandom(), pos.getX(), pos.getY(), pos.getZ()));
+        }
     }
 
     @Override

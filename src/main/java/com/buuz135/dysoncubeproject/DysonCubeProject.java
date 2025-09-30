@@ -87,6 +87,7 @@ public class DysonCubeProject extends ModuleController {
         addCreativeTab("main", () -> new ItemStack(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER), "dyson_cube_project", DCPContent.TAB);
         DCPContent.Blocks.init();
         DCPContent.Items.init();
+        DCPContent.Sounds.init();
     }
 
     @Override

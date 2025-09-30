@@ -1,0 +1,10 @@
+{
+  "railgun": {
+    "category": "block",
+    "sounds": [
+      "dysoncubeproject:railgun"
+    ],
+    "subtitle": "dysoncubeproject.subtitle.railgun",
+    "stream": true
+  }
+}

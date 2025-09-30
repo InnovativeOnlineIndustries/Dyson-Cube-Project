@@ -9,6 +9,7 @@ import com.hrznstudio.titanium.module.DeferredRegistryHelper;
 import com.hrznstudio.titanium.tab.TitaniumTab;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
@@ -41,5 +42,15 @@ public class DCPContent {
         public static void init() {
         }
     }
+
+    public static class Sounds {
+
+        public static DeferredHolder<SoundEvent, SoundEvent> RAILGUN = REGISTRY.registerGeneric(Registries.SOUND_EVENT, "railgun", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "railgun")));
+
+
+        public static void init() {
+        }
+    }
+
 
 }

@@ -42,7 +42,7 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
             long gameTime = entity.getLevel().getGameTime();
             float period = entity.getProgressBarComponent().getMaxProgress(); // ticks for full cycle
             float shootWindow = 28f; // ticks we show the projectile
-            float chargeWindow = 35f; // ticks before shot used to show electricity
+            float chargeWindow = 85f; // ticks before shot used to show electricity
             float t = (float) (entity.getProgressBarComponent().getProgress());
             // CHARGING ANIMATION
             if (t >= period - chargeWindow) {
