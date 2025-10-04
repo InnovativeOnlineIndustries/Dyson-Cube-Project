@@ -1,6 +1,7 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
 import com.buuz135.dysoncubeproject.DCPAttachments;
+import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
@@ -24,12 +25,16 @@ import com.hrznstudio.titanium.network.IButtonHandler;
 import com.hrznstudio.titanium.network.locator.LocatorFactory;
 import com.hrznstudio.titanium.network.locator.instance.TileEntityLocatorInstance;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -77,7 +82,9 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
 
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
-
+        if (level instanceof ClientLevel clientLevel && (level.getGameTime() + pos.asLong()) % (15 * 20) == 0) {
+            Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(DCPContent.Sounds.RAY.get(), SoundSource.BLOCKS, 0.5f, 1f, level.getRandom(), pos.getX(), pos.getY(), pos.getZ()));
+        }
     }
 
     @Override

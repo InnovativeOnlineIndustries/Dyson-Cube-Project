@@ -46,6 +46,8 @@ public class DCPContent {
     public static class Sounds {
 
         public static DeferredHolder<SoundEvent, SoundEvent> RAILGUN = REGISTRY.registerGeneric(Registries.SOUND_EVENT, "railgun", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "railgun")));
+        public static DeferredHolder<SoundEvent, SoundEvent> RAY = REGISTRY.registerGeneric(Registries.SOUND_EVENT, "ray", () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "ray")));
+
 
 
         public static void init() {

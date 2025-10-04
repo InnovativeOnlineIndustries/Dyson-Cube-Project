@@ -6,5 +6,13 @@
     ],
     "subtitle": "dysoncubeproject.subtitle.railgun",
     "stream": true
+  },
+  "ray": {
+    "category": "block",
+    "sounds": [
+      "dysoncubeproject:ray"
+    ],
+    "subtitle": "dysoncubeproject.subtitle.ray",
+    "stream": true
   }
 }
