@@ -1,5 +1,7 @@
 package com.buuz135.dysoncubeproject;
 
+import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
+import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
 import com.buuz135.dysoncubeproject.datagen.DCPLangItemProvider;
@@ -12,6 +14,7 @@ import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.DimensionTypes;
@@ -36,6 +39,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -77,6 +82,20 @@ public class DysonCubeProject extends ModuleController {
                 data.getSpheres().values().forEach(DysonSphereConfiguration::generatePower);
                 data.setDirty();
             }
+        }).subscribe();
+        EventManager.mod(RegisterCapabilitiesEvent.class).process(event -> {
+            event.registerBlock(Capabilities.ItemHandler.BLOCK, (level, blockPos, blockState, blockEntity, direction) -> {
+                if (level instanceof ServerLevel serverLevel && blockEntity instanceof EMRailEjectorBlockEntity emRailEjectorBlockEntity && direction == Direction.DOWN) {
+                    return emRailEjectorBlockEntity.getInput();
+                }
+                return null;
+            }, DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.getBlock());
+            event.registerBlock(Capabilities.EnergyStorage.BLOCK, (level, blockPos, blockState, blockEntity, direction) -> {
+                if (level instanceof ServerLevel serverLevel && blockEntity instanceof RayReceiverBlockEntity rayReceiverBlockEntity && direction == Direction.DOWN) {
+                    return rayReceiverBlockEntity.getEnergyStorageComponent();
+                }
+                return null;
+            }, DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.getBlock());
         }).subscribe();
         DCPAttachments.DR.register(modEventBus);
     }

@@ -280,4 +280,8 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     public void setDysonSphereId(String dysonSphereId) {
         this.dysonSphereId = dysonSphereId;
     }
+
+    public InventoryComponent<EMRailEjectorBlockEntity> getInput() {
+        return input;
+    }
 }

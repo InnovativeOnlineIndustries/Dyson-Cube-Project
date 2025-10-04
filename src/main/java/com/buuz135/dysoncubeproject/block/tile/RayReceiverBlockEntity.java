@@ -48,6 +48,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -73,16 +74,23 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
-        //TODO CHECK IF DAY
-        var dyson = DysonSphereProgressSavedData.get(level);
-        var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
-        var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration()).extractPower(extractingAmount);
-        this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
+        if (level.isDay() && !level.isRaining()) {
+            var dyson = DysonSphereProgressSavedData.get(level);
+            var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
+            var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration()).extractPower(extractingAmount);
+            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
+        }
+        var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);
+        if (capability != null && capability.canReceive()) {
+            var received = capability.receiveEnergy(Math.min(EXTRACT_POWER, this.energyStorageComponent.getEnergyStored()), true);
+            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() - received);
+            capability.receiveEnergy(received, false);
+        }
     }
 
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
-        if (level instanceof ClientLevel clientLevel && (level.getGameTime() + pos.asLong()) % (15 * 20) == 0) {
+        if (level instanceof ClientLevel clientLevel && (level.getGameTime() + pos.asLong()) % (17 * 20) == 0 && level.dayTime() % 24000 < 12000 && !level.isRaining()) {
             Minecraft.getInstance().getSoundManager().play(new SimpleSoundInstance(DCPContent.Sounds.RAY.get(), SoundSource.BLOCKS, 0.5f, 1f, level.getRandom(), pos.getX(), pos.getY(), pos.getZ()));
         }
     }
@@ -160,5 +168,9 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
 
     public void setDysonSphereId(String dysonSphereId) {
         this.dysonSphereId = dysonSphereId;
+    }
+
+    public EnergyStorageComponent<RayReceiverBlockEntity> getEnergyStorageComponent() {
+        return energyStorageComponent;
     }
 }

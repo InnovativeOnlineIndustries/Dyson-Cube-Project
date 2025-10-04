@@ -14,6 +14,9 @@ repositories {
         name 'jared maven'
         url "https://maven.blamejared.com/"
     }
+    maven {
+        url = "https://www.cursemaven.com"
+    }
 }
 
 base {
@@ -103,6 +106,7 @@ dependencies {
     compileOnly "mezz.jei:jei-1.21.1-neoforge-api:$jei_version"
     runtimeOnly "mezz.jei:jei-1.21.1-neoforge:$jei_version"
     implementation project.dependencies.create('com.hrznstudio:titanium:1.21-4.0.40')
+    runtimeOnly "curse.maven:ender-io-64578:7036575"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
