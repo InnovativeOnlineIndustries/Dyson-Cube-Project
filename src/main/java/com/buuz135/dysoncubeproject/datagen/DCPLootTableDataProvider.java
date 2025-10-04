@@ -1,6 +1,7 @@
 package com.buuz135.dysoncubeproject.datagen;
 
 
+import com.buuz135.dysoncubeproject.DCPContent;
 import com.hrznstudio.titanium.datagenerator.loot.TitaniumLootTableProvider;
 import com.hrznstudio.titanium.datagenerator.loot.block.BasicBlockLootTables;
 import net.minecraft.core.HolderLookup;
@@ -26,7 +27,6 @@ public class DCPLootTableDataProvider extends TitaniumLootTableProvider {
             @Override
             protected void generate() {
                 super.generate();
-
             }
         };
     }

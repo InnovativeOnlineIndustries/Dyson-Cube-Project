@@ -1,3 +1,9 @@
 {
-  "loader": "neoforge:empty"
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "particle": "dysoncubeproject:block/ray_receiver_base"
+  }
 }

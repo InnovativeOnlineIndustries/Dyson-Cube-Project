@@ -3,9 +3,7 @@ package com.buuz135.dysoncubeproject;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
 import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.client.ClientSetup;
-import com.buuz135.dysoncubeproject.datagen.DCPBlockstateProvider;
-import com.buuz135.dysoncubeproject.datagen.DCPLangItemProvider;
-import com.buuz135.dysoncubeproject.datagen.DCPRecipesProvider;
+import com.buuz135.dysoncubeproject.datagen.*;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
@@ -54,6 +52,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Mod(DysonCubeProject.MODID)
@@ -115,5 +114,8 @@ public class DysonCubeProject extends ModuleController {
         event.addProvider(new DCPBlockstateProvider(event.getGenerator(), MODID, event.getExistingFileHelper()));
         event.addProvider(new DCPLangItemProvider(event.getGenerator(), MODID, "en_us"));
         event.addProvider(new DCPRecipesProvider(event.getGenerator(), () -> new ArrayList<>(), event.getLookupProvider()));
+        event.addProvider(new DCPLootTableDataProvider(event.getGenerator(), () -> List.of(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.getBlock(),
+                DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.getBlock()), event.getLookupProvider()));
+        event.addProvider(new DCPBlockTagsProvider(event.getGenerator().getPackOutput(), event.getLookupProvider(), MODID, event.getExistingFileHelper()));
     }
 }

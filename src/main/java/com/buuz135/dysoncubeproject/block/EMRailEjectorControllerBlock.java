@@ -7,7 +7,10 @@ import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.block.BasicTileBlock;
+import com.hrznstudio.titanium.block.tile.ActiveTile;
+import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -105,5 +108,17 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE;
+    }
+
+    @Override
+    public NonNullList<ItemStack> getDynamicDrops(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        BlockEntity tileentity = worldIn.getBlockEntity(pos);
+        if (tileentity instanceof EMRailEjectorBlockEntity emRailEjectorBlock && emRailEjectorBlock.getInput() != null) {
+            for (int i = 0; i < emRailEjectorBlock.getInput().getSlots(); ++i) {
+                stacks.add(emRailEjectorBlock.getInput().getStackInSlot(i));
+            }
+        }
+        return stacks;
     }
 }
