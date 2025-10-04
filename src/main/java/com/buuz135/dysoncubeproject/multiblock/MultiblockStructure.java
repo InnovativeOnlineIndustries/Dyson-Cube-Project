@@ -6,15 +6,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class MultiblockStructure {
 
     private final int sizeX, sizeY, sizeZ;
+    private final VoxelShape shape;
 
-    public MultiblockStructure(int sizeX, int sizeY, int sizeZ) {
+    public MultiblockStructure(int sizeX, int sizeY, int sizeZ, VoxelShape shape) {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
         this.sizeZ = sizeZ;
+        this.shape = shape;
     }
 
     public int getSizeX() {
@@ -53,4 +56,7 @@ public class MultiblockStructure {
         return new AABB(anchor.getX() - sizeX, anchor.getY(), anchor.getZ() - sizeZ, anchor.getX() + sizeX, anchor.getY() + sizeY, anchor.getZ() + sizeZ);
     }
 
+    public VoxelShape getShape() {
+        return shape;
+    }
 }

@@ -1,6 +1,7 @@
 {
   "values": [
     "dysoncubeproject:em_railejector_controller",
-    "dysoncubeproject:ray_receiver_controller"
+    "dysoncubeproject:ray_receiver_controller",
+    "dysoncubeproject:multiblock_structure"
   ]
 }

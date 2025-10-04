@@ -22,6 +22,6 @@ public class DCPBlockTagsProvider extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.block().get(), DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.block().get());
+                .add(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.block().get(), DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.block().get(), DCPContent.Blocks.MULTIBLOCK_STRUCTURE.block().get());
     }
 }
