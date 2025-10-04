@@ -49,7 +49,8 @@ public class RayReceiverControllerBlock extends DefaultMultiblockControllerBlock
             Block.box(-2, 32 + 27, -2, 18, 32 + 32, 18)
 
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
-    private static final VoxelShape CONTROLLER_LOCAL_SHAPE = Shapes.join(SHAPE, Block.box(0, 0, 0, 16, 16, 16), BooleanOp.AND);
+    private static final VoxelShape CONTROLLER_LOCAL_SHAPE = Shapes.join(SHAPE, Block.box(0, 1, 0, 16, 16, 16), BooleanOp.AND);
+    public static MultiblockStructure MULTIBLOCK_STRUCTURE = new MultiblockStructure(3, 6, 3, SHAPE);
 
     public RayReceiverControllerBlock() {
         super("ray_receiver_controller", Properties.ofFullCopy(Blocks.IRON_BLOCK), RayReceiverBlockEntity.class);
@@ -127,7 +128,6 @@ public class RayReceiverControllerBlock extends DefaultMultiblockControllerBlock
             }
         }
     }
-    public static MultiblockStructure MULTIBLOCK_STRUCTURE = new MultiblockStructure(3, 6, 3, SHAPE);
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
