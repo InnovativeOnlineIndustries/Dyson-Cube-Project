@@ -2,7 +2,7 @@
   "credit": "Generated small cube projectile",
   "parent": "block/block",
   "textures": {
-    "particle": "dysoncubeproject:block/cannon",
+    "particle": "dysoncubeproject:block/particle",
     "all": "dysoncubeproject:block/cannon"
   },
   "elements": [

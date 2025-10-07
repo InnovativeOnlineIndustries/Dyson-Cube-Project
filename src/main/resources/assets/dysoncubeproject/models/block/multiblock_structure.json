@@ -1,3 +1,5 @@
 {
-  "loader": "neoforge:empty"
+  "textures": {
+    "particle": "dysoncubeproject:block/particle"
+  }
 }

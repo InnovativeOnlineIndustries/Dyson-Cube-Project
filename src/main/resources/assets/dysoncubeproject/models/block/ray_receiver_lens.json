@@ -7,7 +7,7 @@
   ],
   "textures": {
     "0": "dysoncubeproject:block/ray_receiver_lens",
-    "particle": "dysoncubeproject:block/ray_receiver_lens"
+    "particle": "dysoncubeproject:block/particle"
   },
   "elements": [
     {

@@ -7,7 +7,7 @@
   ],
   "textures": {
     "0": "dysoncubeproject:block/ray_receiver_plate",
-    "particle": "dysoncubeproject:block/ray_receiver_plate"
+    "particle": "dysoncubeproject:block/particle"
   },
   "elements": [
     {

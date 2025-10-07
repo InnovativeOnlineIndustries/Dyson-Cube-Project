@@ -7,7 +7,7 @@
   ],
   "textures": {
     "0": "dysoncubeproject:block/em_railejector_gun",
-    "particle": "dysoncubeproject:block/em_railejector_gun"
+    "particle": "dysoncubeproject:block/particle"
   },
   "elements": [
     {

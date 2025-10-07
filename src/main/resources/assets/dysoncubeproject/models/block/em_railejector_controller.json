@@ -1,9 +1,5 @@
 {
-  "texture_size": [
-    128,
-    128
-  ],
   "textures": {
-    "particle": "dysoncubeproject:block/em_railejector_controller"
+    "particle": "dysoncubeproject:block/particle"
   }
 }
