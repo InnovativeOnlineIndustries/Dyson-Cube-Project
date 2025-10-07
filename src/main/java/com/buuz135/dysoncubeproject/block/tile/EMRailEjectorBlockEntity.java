@@ -91,7 +91,8 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     private boolean canIncrease() {
         if (this.cooldown > 0) return false;
         if (this.input.getStackInSlot(0).isEmpty()) return false;
-        if (this.getLevel().isRaining() || this.getLevel().isNight()) return false;
+        if (this.getLevel().isRaining() || this.getLevel().isNight() || !this.getLevel().canSeeSky(this.getBlockPos().above()))
+            return false;
         var time = level.getTimeOfDay(1f) * 360f;
         if (time <= 10 || time >= 360 - 10) {
             return false;

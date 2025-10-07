@@ -76,7 +76,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
-        if (level.isDay() && !level.isRaining()) {
+        if (level.isDay() && !level.isRaining() && level.canSeeSky(pos.above())) {
             var dyson = DysonSphereProgressSavedData.get(level);
             var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
             var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration()).extractPower(extractingAmount);
