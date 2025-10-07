@@ -63,11 +63,20 @@ public class DCPRecipesProvider extends RecipeProvider {
                 .define('B', Items.IRON_BARS)
                 .save(consumer);
         TitaniumShapedRecipeBuilder.shapedRecipe(DCPContent.Items.BEAM_PACKAGE.get())
-                .pattern("GGG")
+                .pattern(" G ")
                 .pattern("GIG")
-                .pattern("GGG")
+                .pattern(" G ")
                 .define('G', DCPContent.Items.BEAM.get())
                 .define('I', Tags.Items.STORAGE_BLOCKS_COPPER)
+                .save(consumer);
+        TitaniumShapedRecipeBuilder.shapedRecipe(DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.asItem())
+                .pattern("SSS")
+                .pattern("NBN")
+                .pattern("III")
+                .define('S', DCPContent.Items.SOLAR_SAIL.get())
+                .define('N', Items.SMOOTH_STONE_SLAB)
+                .define('I', Tags.Items.STORAGE_BLOCKS_IRON)
+                .define('B', DCPContent.Items.BEAM.get())
                 .save(consumer);
     }
 }

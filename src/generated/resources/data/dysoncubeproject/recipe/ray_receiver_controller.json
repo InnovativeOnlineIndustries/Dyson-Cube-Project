@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "dysoncubeproject:ray_receiver_controller"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "dysoncubeproject:beam"
+    },
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "N": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "S": {
+      "item": "dysoncubeproject:solar_sail"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "NBN",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "dysoncubeproject:ray_receiver_controller"
+  }
+}

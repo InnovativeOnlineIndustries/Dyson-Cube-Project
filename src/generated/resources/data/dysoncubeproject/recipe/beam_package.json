@@ -16,9 +16,9 @@
     }
   },
   "pattern": [
-    "GGG",
+    " G ",
     "GIG",
-    "GGG"
+    " G "
   ],
   "result": {
     "count": 1,
