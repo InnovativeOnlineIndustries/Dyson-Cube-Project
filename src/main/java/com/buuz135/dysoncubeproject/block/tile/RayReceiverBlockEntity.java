@@ -64,6 +64,8 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     private String dysonSphereId;
     @Save
     private EnergyStorageComponent<RayReceiverBlockEntity> energyStorageComponent;
+    @Save
+    private float currentPitch, targetPitch;
 
     public RayReceiverBlockEntity(BasicTileBlock<RayReceiverBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
@@ -85,6 +87,22 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
             this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() - received);
             capability.receiveEnergy(received, false);
         }
+
+        this.targetPitch = level.getTimeOfDay(1f) * 360f;
+
+
+        if (this.targetPitch >= 90 && this.targetPitch <= 270) {
+            this.targetPitch = 270;
+        }
+
+
+        if ((this.currentPitch) % 360 <= this.targetPitch) {
+            this.currentPitch = Math.min((this.currentPitch + 1) % 360, this.targetPitch);
+        } else if (this.currentPitch > this.targetPitch) {
+            this.currentPitch = Math.max(this.currentPitch - 1, this.targetPitch);
+        }
+
+        syncObject(currentPitch);
     }
 
     @Override
@@ -171,5 +189,9 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
 
     public EnergyStorageComponent<RayReceiverBlockEntity> getEnergyStorageComponent() {
         return energyStorageComponent;
+    }
+
+    public float getCurrentPitch() {
+        return currentPitch;
     }
 }

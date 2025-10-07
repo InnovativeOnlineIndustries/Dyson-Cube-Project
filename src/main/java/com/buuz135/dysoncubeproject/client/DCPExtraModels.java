@@ -10,4 +10,6 @@ public class DCPExtraModels {
 
     public static BakedModel RAY_RECEIVER_BASE;
     public static BakedModel RAY_RECEIVER_PLATE;
+    public static BakedModel RAY_RECEIVER_LENS;
+    public static BakedModel RAY_RECEIVER_LENS_STANDS;
 }

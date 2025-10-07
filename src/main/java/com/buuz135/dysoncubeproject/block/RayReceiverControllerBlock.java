@@ -46,7 +46,10 @@ public class RayReceiverControllerBlock extends DefaultMultiblockControllerBlock
             Block.box(-16, 32 + 4, -13, -13, 32 + 8, 29),
             Block.box(0, 32 + 4, 0, 16, 32 + 12, 16),
             Block.box(4, 32 + 12, 4, 12, 32 + 28, 12),
-            Block.box(-2, 32 + 27, -2, 18, 32 + 32, 18)
+            Block.box(-2, 32 + 27, -2, 18, 32 + 32, 18),
+
+            Block.box(5, 64 + 0, 12, 11, 64 + 18, 16),
+            Block.box(5, 64 + 0, 0, 11, 64 + 18, 4)
 
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     private static final VoxelShape CONTROLLER_LOCAL_SHAPE = Shapes.join(SHAPE, Block.box(0, 0, 0, 16, 15.9, 16), BooleanOp.AND);

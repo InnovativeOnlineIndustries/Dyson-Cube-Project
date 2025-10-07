@@ -8,6 +8,7 @@ import com.buuz135.dysoncubeproject.client.DCPRenderTypes;
 import com.buuz135.dysoncubeproject.client.DCPShaders;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -61,6 +62,17 @@ public class RayReceiverRender implements BlockEntityRenderer<RayReceiverBlockEn
 
         poseStack.translate(0, 2, 0);
         Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.solid()), null, DCPExtraModels.RAY_RECEIVER_PLATE, 255, 255, 255, combinedLightIn, combinedOverlayIn);
+        poseStack.pushPose();
+        poseStack.translate(0, 2, 1);
+        poseStack.mulPose(Axis.YP.rotationDegrees(90));
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.solid()), null, DCPExtraModels.RAY_RECEIVER_LENS_STANDS, 255, 255, 255, combinedLightIn, combinedOverlayIn);
+
+        //poseStack.rotateAround(Axis.XP.rotationDegrees(360 - rayReceiverBlockEntity.getCurrentYaw()), 0, 0.5f, 0.5f);
+        poseStack.rotateAround(Axis.XP.rotationDegrees(-90), 0, 0.55f, 0.5f);
+        poseStack.rotateAround(Axis.XP.rotationDegrees(360 - rayReceiverBlockEntity.getCurrentPitch() - 180), 0, 0.55f, 0.5f);
+        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderModel(poseStack.last(), multiBufferSource.getBuffer(RenderType.solid()), null, DCPExtraModels.RAY_RECEIVER_LENS, 255, 255, 255, combinedLightIn, combinedOverlayIn);
+
+        poseStack.popPose();
 
         if (DCPShaders.HOLO_HEX != null) {
             // Update custom uniforms for the shader

@@ -33,6 +33,8 @@ public class ClientSetup {
             DCPExtraModels.EM_RAILEJECTOR_PROJECTILE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/em_railejector_projectile"), event.getModelBakery());
             DCPExtraModels.RAY_RECEIVER_BASE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_base"), event.getModelBakery());
             DCPExtraModels.RAY_RECEIVER_PLATE = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_plate"), event.getModelBakery());
+            DCPExtraModels.RAY_RECEIVER_LENS = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_lens"), event.getModelBakery());
+            DCPExtraModels.RAY_RECEIVER_LENS_STANDS = bakeModel(ResourceLocation.fromNamespaceAndPath(DysonCubeProject.MODID, "block/ray_receiver_lens_stands"), event.getModelBakery());
         }).subscribe();
         EventManager.mod(EntityRenderersEvent.RegisterRenderers.class).process(event -> {
             event.registerBlockEntityRenderer((BlockEntityType<? extends EMRailEjectorBlockEntity>) DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.type().get(), context -> new EMRailEjectorRender());
