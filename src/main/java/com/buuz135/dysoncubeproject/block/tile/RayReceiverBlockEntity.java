@@ -68,9 +68,8 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     public RayReceiverBlockEntity(BasicTileBlock<RayReceiverBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
         this.dysonSphereId = "";
-        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 20, 20);
+        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 25, 22);
     }
-
 
     @Override
     public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
@@ -98,7 +97,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     @Override
     public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         openGui(player);
-        return super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        return ItemInteractionResult.SUCCESS;
     }
 
     public void openGui(Player player) {

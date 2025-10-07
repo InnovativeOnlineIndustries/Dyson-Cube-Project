@@ -191,7 +191,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     @Override
     public ItemInteractionResult onActivated(Player player, InteractionHand hand, Direction facing, double hitX, double hitY, double hitZ) {
         openGui(player);
-        return super.onActivated(player, hand, facing, hitX, hitY, hitZ);
+        return ItemInteractionResult.SUCCESS;
     }
 
     public void openGui(Player player) {

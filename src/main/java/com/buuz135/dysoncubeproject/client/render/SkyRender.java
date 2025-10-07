@@ -25,7 +25,7 @@ public class SkyRender {
 
         if (sphere == null) return;
         var progress = (float) sphere.getProgress();
-        progress = 1f;
+        //progress = 1f;
         PoseStack pose = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
 
