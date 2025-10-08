@@ -106,6 +106,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
         syncObject(currentPitch);
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
         if (level instanceof ClientLevel clientLevel && (level.getGameTime() + pos.asLong()) % (17 * 20) == 0 && level.dayTime() % 24000 < 12000 && !level.isRaining()) {

@@ -17,6 +17,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class MultiblockStructureBlockEntity extends BasicTile<MultiblockStructureBlockEntity> implements ITickableBlockEntity<MultiblockStructureBlockEntity> {
 
@@ -34,6 +36,7 @@ public class MultiblockStructureBlockEntity extends BasicTile<MultiblockStructur
         return controllerPos;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, MultiblockStructureBlockEntity blockEntity) {
         if (controllerPos != null) {

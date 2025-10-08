@@ -182,6 +182,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void clientTick(Level level, BlockPos pos, BlockState state, EMRailEjectorBlockEntity blockEntity) {
         if (level instanceof ClientLevel clientLevel && progressBarComponent.getProgress() == 7) {
