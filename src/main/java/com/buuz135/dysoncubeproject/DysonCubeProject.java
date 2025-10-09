@@ -10,8 +10,14 @@ import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
 import com.hrznstudio.titanium.network.NetworkHandler;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -42,6 +48,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
@@ -95,6 +102,92 @@ public class DysonCubeProject extends ModuleController {
                 }
                 return null;
             }, DCPContent.Blocks.RAY_RECEIVER_CONTROLLER.getBlock());
+        }).subscribe();
+        EventManager.forge(RegisterCommandsEvent.class).process(event -> {
+            var dispatcher = event.getDispatcher();
+            SuggestionProvider<CommandSourceStack> sphereIdSuggestions = (ctx, builder) -> {
+                var level = ctx.getSource().getLevel();
+                var data = com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData.get(level);
+                if (data != null) {
+                    return SharedSuggestionProvider.suggest(data.getSpheres().keySet(), builder);
+                }
+                return SharedSuggestionProvider.suggest(java.util.List.of(), builder);
+            };
+            dispatcher.register(Commands.literal("dysoncubeproject")
+                    .requires(source -> source.hasPermission(2))
+                    .then(Commands.literal("set")
+                            .then(Commands.literal("beams")
+                                    .then(Commands.argument("sphereId", StringArgumentType.string()).suggests(sphereIdSuggestions)
+                                            .then(Commands.argument("value", IntegerArgumentType.integer(0))
+                                                    .executes(ctx -> {
+                                                        var source = ctx.getSource();
+                                                        var level = source.getLevel();
+                                                        var sphereId = StringArgumentType.getString(ctx, "sphereId");
+                                                        final int input = IntegerArgumentType.getInteger(ctx, "value");
+                                                        var data = DysonSphereProgressSavedData.get(level);
+                                                        if (data == null) return 0;
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        final int clamped = Math.max(0, Math.min(input, config.getMaxBeams()));
+                                                        config.setBeams(clamped);
+                                                        data.setDirty();
+                                                        source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Set beams for sphere '" + sphereId + "' to " + clamped), true);
+                                                        return 1;
+                                                    })))))
+                    .then(Commands.literal("set")
+                            .then(Commands.literal("panels")
+                                    .then(Commands.argument("sphereId", StringArgumentType.string()).suggests(sphereIdSuggestions)
+                                            .then(Commands.argument("value", IntegerArgumentType.integer(0))
+                                                    .executes(ctx -> {
+                                                        var source = ctx.getSource();
+                                                        var level = source.getLevel();
+                                                        var sphereId = StringArgumentType.getString(ctx, "sphereId");
+                                                        final int input = IntegerArgumentType.getInteger(ctx, "value");
+                                                        var data = DysonSphereProgressSavedData.get(level);
+                                                        if (data == null) return 0;
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        final int clamped = Math.max(0, Math.min(input, config.getMaxSolarPanels()));
+                                                        config.setSolarPanels(clamped);
+                                                        data.setDirty();
+                                                        source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Set solar panels for sphere '" + sphereId + "' to " + clamped), true);
+                                                        return 1;
+                                                    })))))
+                    .then(Commands.literal("add")
+                            .then(Commands.literal("beams")
+                                    .then(Commands.argument("sphereId", StringArgumentType.string()).suggests(sphereIdSuggestions)
+                                            .then(Commands.argument("delta", IntegerArgumentType.integer())
+                                                    .executes(ctx -> {
+                                                        var source = ctx.getSource();
+                                                        var level = source.getLevel();
+                                                        var sphereId = StringArgumentType.getString(ctx, "sphereId");
+                                                        int delta = IntegerArgumentType.getInteger(ctx, "delta");
+                                                        var data = DysonSphereProgressSavedData.get(level);
+                                                        if (data == null) return 0;
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        int newVal = Math.max(0, Math.min(config.getBeams() + delta, config.getMaxBeams()));
+                                                        config.setBeams(newVal);
+                                                        data.setDirty();
+                                                        source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Beams for sphere '" + sphereId + "' is now " + newVal), true);
+                                                        return 1;
+                                                    })))))
+                    .then(Commands.literal("add")
+                            .then(Commands.literal("panels")
+                                    .then(Commands.argument("sphereId", StringArgumentType.string()).suggests(sphereIdSuggestions)
+                                            .then(Commands.argument("delta", IntegerArgumentType.integer())
+                                                    .executes(ctx -> {
+                                                        var source = ctx.getSource();
+                                                        var level = source.getLevel();
+                                                        var sphereId = StringArgumentType.getString(ctx, "sphereId");
+                                                        int delta = IntegerArgumentType.getInteger(ctx, "delta");
+                                                        var data = DysonSphereProgressSavedData.get(level);
+                                                        if (data == null) return 0;
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        int newVal = Math.max(0, Math.min(config.getSolarPanels() + delta, config.getMaxSolarPanels()));
+                                                        config.setSolarPanels(newVal);
+                                                        data.setDirty();
+                                                        source.sendSuccess(() -> net.minecraft.network.chat.Component.literal("Solar panels for sphere '" + sphereId + "' is now " + newVal), true);
+                                                        return 1;
+                                                    })))))
+            );
         }).subscribe();
         DCPAttachments.DR.register(modEventBus);
     }
