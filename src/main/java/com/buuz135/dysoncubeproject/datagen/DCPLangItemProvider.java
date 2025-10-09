@@ -36,6 +36,7 @@ public class DCPLangItemProvider extends LanguageProvider {
         this.add("gui.dysoncubeproject.beams", "Beams: %s");
         this.add("gui.dysoncubeproject.sails", "Sails: %s/%s");
         this.add("gui.dysoncubeproject.needs_more_beams", "Needs more beams");
+        this.add("gui.dysoncubeproject.subscribe", "Subscribe to this sphere");
     }
 
     private void formatItem(Item item) {

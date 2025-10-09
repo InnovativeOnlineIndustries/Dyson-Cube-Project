@@ -4,6 +4,7 @@ import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
 import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.*;
+import com.buuz135.dysoncubeproject.network.ClientSubscribeSphereMessage;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
 import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
@@ -72,6 +73,7 @@ public class DysonCubeProject extends ModuleController {
     public DysonCubeProject(Dist dist, IEventBus modEventBus, ModContainer modContainer) {
         super(modContainer);
         NETWORK.registerMessage("dyson_sphere_sync", DysonSphereSyncMessage.class);
+        NETWORK.registerMessage("client_subscribe_sphere", ClientSubscribeSphereMessage.class);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         if (dist == Dist.CLIENT) ClientSetup.init();

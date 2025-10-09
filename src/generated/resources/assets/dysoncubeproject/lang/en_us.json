@@ -9,6 +9,7 @@
   "gui.dysoncubeproject.power_gen": "Power Gen: %s FE",
   "gui.dysoncubeproject.progress": "Progress: %s%%",
   "gui.dysoncubeproject.sails": "Sails: %s/%s",
+  "gui.dysoncubeproject.subscribe": "Subscribe to this sphere",
   "item.dysoncubeproject.beam": "Beam",
   "item.dysoncubeproject.beam_package": "Beam Package",
   "item.dysoncubeproject.solar_sail": "Solar Sail",
