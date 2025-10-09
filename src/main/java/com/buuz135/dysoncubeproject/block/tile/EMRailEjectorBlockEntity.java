@@ -101,7 +101,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         if (dyson.getProgress() >= 1) return false;
         var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
-        if (solarPanels > 0 && dyson.getSolarPanels() >= dyson.getMaxSolarPanels()) return false;
+        if (solarPanels > 0 && (dyson.getSolarPanels() + solarPanels) >= dyson.getMaxSolarPanels()) return false;
         if (beams > 0 && dyson.getBeams() >= dyson.getMaxBeams()) return false;
         return true;
     }
