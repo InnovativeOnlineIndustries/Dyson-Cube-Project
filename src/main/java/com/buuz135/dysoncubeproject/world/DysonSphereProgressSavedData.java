@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.storage.LevelData;
 
 import java.util.HashMap;
 
@@ -14,7 +13,7 @@ public class DysonSphereProgressSavedData extends SavedData {
 
     public static final String ID = "dyson_sphere_progress";
 
-    private HashMap<String, DysonSphereConfiguration> spheres;
+    private HashMap<String, DysonSphereStructure> spheres;
     private HashMap<String, String> subscribedPlayers;
 
     public DysonSphereProgressSavedData() {
@@ -37,7 +36,7 @@ public class DysonSphereProgressSavedData extends SavedData {
         var data = new DysonSphereProgressSavedData();
         var spheres = compoundTag.getCompound("spheres");
         for (String key : spheres.getAllKeys()) {
-            data.spheres.put(key, new DysonSphereConfiguration());
+            data.spheres.put(key, new DysonSphereStructure());
             data.spheres.get(key).deserializeNBT(provider, spheres.getCompound(key));
         }
         var subscribedPlayers = compoundTag.getCompound("subscribedPlayers");
@@ -64,7 +63,7 @@ public class DysonSphereProgressSavedData extends SavedData {
         return tag;
     }
 
-    public HashMap<String, DysonSphereConfiguration> getSpheres() {
+    public HashMap<String, DysonSphereStructure> getSpheres() {
         return spheres;
     }
 

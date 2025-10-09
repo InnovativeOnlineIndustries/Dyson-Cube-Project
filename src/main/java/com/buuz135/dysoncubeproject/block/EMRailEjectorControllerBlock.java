@@ -2,13 +2,10 @@ package com.buuz135.dysoncubeproject.block;
 
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.block.tile.EMRailEjectorBlockEntity;
-import com.buuz135.dysoncubeproject.block.tile.MultiblockStructureBlockEntity;
 import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
-import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.block.BasicTileBlock;
-import com.hrznstudio.titanium.block.tile.ActiveTile;
-import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
@@ -62,7 +59,7 @@ public class EMRailEjectorControllerBlock extends DefaultMultiblockControllerBlo
             if (placer != null) {
                 var dyson = DysonSphereProgressSavedData.get(level);
                 var subscribedSphere = dyson.getSubscribedFor(placer.getStringUUID());
-                dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereConfiguration());
+                dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereStructure());
                 dyson.setDirty();
                 if (serverLevel.getBlockEntity(pos) instanceof EMRailEjectorBlockEntity blockEntity) {
                     blockEntity.setDysonSphereId(subscribedSphere);

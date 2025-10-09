@@ -1,9 +1,8 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
-import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
-import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
@@ -16,8 +15,6 @@ import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IHasAssetProvider;
 import com.hrznstudio.titanium.component.IComponentHarness;
 import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
-import com.hrznstudio.titanium.component.inventory.InventoryComponent;
-import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import com.hrznstudio.titanium.container.addon.IContainerAddonProvider;
@@ -42,7 +39,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -79,7 +75,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
         if (level.isDay() && !level.isRaining() && level.canSeeSky(pos.above())) {
             var dyson = DysonSphereProgressSavedData.get(level);
             var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
-            var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration()).extractPower(extractingAmount);
+            var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure()).extractPower(extractingAmount);
             this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
         }
         var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);

@@ -1,26 +1,23 @@
 package com.buuz135.dysoncubeproject.world;
 
+import com.buuz135.dysoncubeproject.Config;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.UnknownNullability;
 
-public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
-
-    public static final int MAX_SOLAR_PANELS = 50_000_000;
-    public static final int BEAM_TO_SOLAR_PANEL_RATIO = 6;
-    public static final int POWER_PER_SOLAR_PANEL = 20;
+public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
 
     private int beams;
     private int solarPanels;
     private int storedPower;
     private int lastConsumedPower;
 
-    public DysonSphereConfiguration() {
+    public DysonSphereStructure() {
         this(0, 0);
     }
 
-    public DysonSphereConfiguration(int beams, int solarPanels) {
+    public DysonSphereStructure(int beams, int solarPanels) {
         this.beams = beams;
         this.solarPanels = solarPanels;
     }
@@ -42,15 +39,15 @@ public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
     }
 
     public int getMaxSolarPanels() {
-        return beams * BEAM_TO_SOLAR_PANEL_RATIO;
+        return beams * Config.BEAM_TO_SOLAR_PANEL_RATIO;
     }
 
     public double getProgress() {
-        return solarPanels / (double) MAX_SOLAR_PANELS;
+        return solarPanels / (double) Config.MAX_SOLAR_PANELS;
     }
 
     public int getMaxBeams() {
-        return MAX_SOLAR_PANELS / BEAM_TO_SOLAR_PANEL_RATIO;
+        return Config.MAX_SOLAR_PANELS / Config.BEAM_TO_SOLAR_PANEL_RATIO;
     }
 
     public void increaseBeams(int amount) {
@@ -65,7 +62,7 @@ public class DysonSphereConfiguration implements INBTSerializable<CompoundTag> {
 
     public void generatePower() {
         this.lastConsumedPower = 0;
-        this.storedPower = Math.min(this.solarPanels * POWER_PER_SOLAR_PANEL, this.storedPower + this.solarPanels * POWER_PER_SOLAR_PANEL);
+        this.storedPower = Math.min(this.solarPanels * Config.POWER_PER_SAIL, this.storedPower + this.solarPanels * Config.POWER_PER_SAIL);
     }
 
     public int extractPower(int amount) {

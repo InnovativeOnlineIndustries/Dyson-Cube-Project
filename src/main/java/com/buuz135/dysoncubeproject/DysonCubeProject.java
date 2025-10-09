@@ -6,7 +6,7 @@ import com.buuz135.dysoncubeproject.client.ClientSetup;
 import com.buuz135.dysoncubeproject.datagen.*;
 import com.buuz135.dysoncubeproject.network.ClientSubscribeSphereMessage;
 import com.buuz135.dysoncubeproject.network.DysonSphereSyncMessage;
-import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.event.handler.EventManager;
 import com.hrznstudio.titanium.module.ModuleController;
@@ -15,48 +15,24 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
-import net.minecraft.world.level.dimension.DimensionType;
-import net.minecraft.world.level.material.MapColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -75,7 +51,7 @@ public class DysonCubeProject extends ModuleController {
         NETWORK.registerMessage("dyson_sphere_sync", DysonSphereSyncMessage.class);
         NETWORK.registerMessage("client_subscribe_sphere", ClientSubscribeSphereMessage.class);
 
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
         if (dist == Dist.CLIENT) ClientSetup.init();
 
         EventManager.forge(LevelTickEvent.Pre.class).process(post -> {
@@ -87,7 +63,7 @@ public class DysonCubeProject extends ModuleController {
                         NETWORK.sendTo(packet, player);
                     }
                 }
-                data.getSpheres().values().forEach(DysonSphereConfiguration::generatePower);
+                data.getSpheres().values().forEach(DysonSphereStructure::generatePower);
                 data.setDirty();
             }
         }).subscribe();
@@ -128,7 +104,7 @@ public class DysonCubeProject extends ModuleController {
                                                         final int input = IntegerArgumentType.getInteger(ctx, "value");
                                                         var data = DysonSphereProgressSavedData.get(level);
                                                         if (data == null) return 0;
-                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereStructure());
                                                         final int clamped = Math.max(0, Math.min(input, config.getMaxBeams()));
                                                         config.setBeams(clamped);
                                                         data.setDirty();
@@ -146,7 +122,7 @@ public class DysonCubeProject extends ModuleController {
                                                         final int input = IntegerArgumentType.getInteger(ctx, "value");
                                                         var data = DysonSphereProgressSavedData.get(level);
                                                         if (data == null) return 0;
-                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereStructure());
                                                         final int clamped = Math.max(0, Math.min(input, config.getMaxSolarPanels()));
                                                         config.setSolarPanels(clamped);
                                                         data.setDirty();
@@ -164,7 +140,7 @@ public class DysonCubeProject extends ModuleController {
                                                         int delta = IntegerArgumentType.getInteger(ctx, "delta");
                                                         var data = DysonSphereProgressSavedData.get(level);
                                                         if (data == null) return 0;
-                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereStructure());
                                                         int newVal = Math.max(0, Math.min(config.getBeams() + delta, config.getMaxBeams()));
                                                         config.setBeams(newVal);
                                                         data.setDirty();
@@ -182,7 +158,7 @@ public class DysonCubeProject extends ModuleController {
                                                         int delta = IntegerArgumentType.getInteger(ctx, "delta");
                                                         var data = DysonSphereProgressSavedData.get(level);
                                                         if (data == null) return 0;
-                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereConfiguration());
+                                                        var config = data.getSpheres().computeIfAbsent(sphereId, s -> new DysonSphereStructure());
                                                         int newVal = Math.max(0, Math.min(config.getSolarPanels() + delta, config.getMaxSolarPanels()));
                                                         config.setSolarPanels(newVal);
                                                         data.setDirty();

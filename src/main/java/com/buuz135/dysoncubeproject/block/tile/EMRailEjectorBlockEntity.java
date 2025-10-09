@@ -4,7 +4,7 @@ import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
 import com.buuz135.dysoncubeproject.client.gui.SubscribeDysonGuiAddon;
-import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.annotation.Save;
 import com.hrznstudio.titanium.api.IFactory;
@@ -18,7 +18,6 @@ import com.hrznstudio.titanium.client.screen.asset.IHasAssetProvider;
 import com.hrznstudio.titanium.component.IComponentHarness;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
-import com.hrznstudio.titanium.component.sideness.IFacingComponentHarness;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
 import com.hrznstudio.titanium.container.addon.IContainerAddon;
 import com.hrznstudio.titanium.container.addon.IContainerAddonProvider;
@@ -34,7 +33,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -47,7 +45,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -98,7 +95,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         if (time <= 10 || time >= 360 - 10) {
             return false;
         }
-        var dyson = DysonSphereProgressSavedData.get(this.level).getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration());
+        var dyson = DysonSphereProgressSavedData.get(this.level).getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure());
         if (dyson.getProgress() >= 1) return false;
         var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
@@ -109,7 +106,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
 
     private void onFinishWork() {
         var data = DysonSphereProgressSavedData.get(this.level);
-        var dyson = data.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereConfiguration());
+        var dyson = data.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure());
         var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
         this.input.getStackInSlot(0).shrink(1);

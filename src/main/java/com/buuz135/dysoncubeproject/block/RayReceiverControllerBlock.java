@@ -3,7 +3,7 @@ package com.buuz135.dysoncubeproject.block;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.block.tile.RayReceiverBlockEntity;
 import com.buuz135.dysoncubeproject.multiblock.MultiblockStructure;
-import com.buuz135.dysoncubeproject.world.DysonSphereConfiguration;
+import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.block.BasicTileBlock;
 import net.minecraft.core.BlockPos;
@@ -77,7 +77,7 @@ public class RayReceiverControllerBlock extends DefaultMultiblockControllerBlock
             if (placer != null) {
                 var dyson = DysonSphereProgressSavedData.get(level);
                 var subscribedSphere = dyson.getSubscribedFor(placer.getStringUUID());
-                dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereConfiguration());
+                dyson.getSpheres().computeIfAbsent(subscribedSphere, s -> new DysonSphereStructure());
                 dyson.setDirty();
                 if (serverLevel.getBlockEntity(pos) instanceof RayReceiverBlockEntity blockEntity) {
                     blockEntity.setDysonSphereId(subscribedSphere);
