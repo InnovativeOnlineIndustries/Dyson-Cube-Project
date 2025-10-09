@@ -27,6 +27,15 @@ public class DCPLangItemProvider extends LanguageProvider {
         formatItem(DCPContent.Items.BEAM_PACKAGE.get());
         formatItem(DCPContent.Items.SOLAR_SAIL.get());
         formatItem(DCPContent.Items.SOLAR_SAIL_PACKAGE.get());
+
+        // GUI localization for DysonProgressGuiAddon
+        this.add("gui.dysoncubeproject.dyson_information", "Dyson Information");
+        this.add("gui.dysoncubeproject.progress", "Progress: %s%%");
+        this.add("gui.dysoncubeproject.power_gen", "Power Gen: %s FE");
+        this.add("gui.dysoncubeproject.power_con", "Power Con: %s FE");
+        this.add("gui.dysoncubeproject.beams", "Beams: %s");
+        this.add("gui.dysoncubeproject.sails", "Sails: %s/%s");
+        this.add("gui.dysoncubeproject.needs_more_beams", "Needs more beams");
     }
 
     private void formatItem(Item item) {

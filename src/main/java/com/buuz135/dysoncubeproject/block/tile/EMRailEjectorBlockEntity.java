@@ -73,7 +73,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
 
     public EMRailEjectorBlockEntity(BasicTileBlock<EMRailEjectorBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
-        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 8, 42, 120).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
+        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 4, 42, 120).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
             syncObject(this.progressBarComponent);
         }).setOnFinishWork(this::onFinishWork).setIncreaseType(true).setComponentHarness(this).setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).setColor(DyeColor.CYAN);
         this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 10, 42, 1)
@@ -216,7 +216,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
         list.addAll(this.progressBarComponent.getScreenAddons());
         list.addAll(this.input.getScreenAddons());
-        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 64, 24));
+        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 62, 24));
         return list;
     }
 

@@ -107,7 +107,7 @@ public class DysonCubeProject extends ModuleController {
             var dispatcher = event.getDispatcher();
             SuggestionProvider<CommandSourceStack> sphereIdSuggestions = (ctx, builder) -> {
                 var level = ctx.getSource().getLevel();
-                var data = com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData.get(level);
+                var data = DysonSphereProgressSavedData.get(level);
                 if (data != null) {
                     return SharedSuggestionProvider.suggest(data.getSpheres().keySet(), builder);
                 }
