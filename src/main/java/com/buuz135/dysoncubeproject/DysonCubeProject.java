@@ -116,7 +116,7 @@ public class DysonCubeProject extends ModuleController {
                 return SharedSuggestionProvider.suggest(java.util.List.of(), builder);
             };
             dispatcher.register(Commands.literal("dysoncubeproject")
-                    .requires(source -> source.hasPermission(2))
+                    .requires(source -> source.hasPermission(4))
                     .then(Commands.literal("set")
                             .then(Commands.literal("beams")
                                     .then(Commands.argument("sphereId", StringArgumentType.string()).suggests(sphereIdSuggestions)
