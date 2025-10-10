@@ -28,4 +28,7 @@ public class Config {
     @ConfigVal(comment = "The amount of power generated per sail")
     @ConfigVal.InRangeInt(min = 0)
     public static int POWER_PER_SAIL = 20;
+
+    @ConfigVal(comment = "Always show sphere at max progress")
+    public static boolean SHOW_AT_MAX_PROGRESS = false;
 }

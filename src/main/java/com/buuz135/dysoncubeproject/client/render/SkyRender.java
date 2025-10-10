@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.client.render;
 
+import com.buuz135.dysoncubeproject.Config;
 import com.buuz135.dysoncubeproject.client.DCPRenderTypes;
 import com.buuz135.dysoncubeproject.client.DCPShaders;
 import com.buuz135.dysoncubeproject.world.ClientDysonSphere;
@@ -25,7 +26,7 @@ public class SkyRender {
 
         if (sphere == null) return;
         var progress = (float) sphere.getProgress();
-        //progress = 1f;
+        if (Config.SHOW_AT_MAX_PROGRESS) progress = 1f;
         PoseStack pose = event.getPoseStack();
         MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
 
