@@ -66,7 +66,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     public RayReceiverBlockEntity(BasicTileBlock<RayReceiverBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
         this.dysonSphereId = "";
-        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 25, 22);
+        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 19, 22);
         this.currentPitch = 270;
     }
 
@@ -127,7 +127,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     public @NotNull List<IFactory<? extends IScreenAddon>> getScreenAddons() {
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
         list.addAll(this.energyStorageComponent.getScreenAddons());
-        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 64, 24));
+        list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 56, 24));
         return list;
     }
 

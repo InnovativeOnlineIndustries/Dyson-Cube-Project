@@ -43,7 +43,18 @@ public class SkyRender {
                 if (uValid != null) uValid.set(true ? 1.0f : 0.0f);
                 var uSize = shader.getUniform("uSize");
                 if (uSize != null) uSize.set(25f);
-
+                var uCam = shader.getUniform("uCamPos");
+                if (uCam != null) {
+                    var c = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
+                    try {
+                        uCam.set(0f, 0f, 0f);
+                    } catch (Throwable t) {
+                        try {
+                            uCam.set((float) c.x, (float) c.y, (float) c.z, 1.0f);
+                        } catch (Throwable ignored2) {
+                        }
+                    }
+                }
             } catch (Throwable ignored) {
             }
 
