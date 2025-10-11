@@ -14,7 +14,7 @@ import com.mojang.math.Axis;
 
 public class SkyRender {
 
-    public static void onRenderStage(RenderLevelStageEvent event) { //TODO HIDE WHEN RAINING
+    public static void onRenderStage(RenderLevelStageEvent event) {
         // Draw after vanilla sky (sun/moon) so we render "on top of the sun"
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) return;
 
@@ -71,6 +71,8 @@ public class SkyRender {
             // Build a square in local XY plane; shader expects half-extent ~30 (it divides by 60.0 for UV)
             float s = 30.0f;
             float r = 0.5f, g = 0.9f, b = 0.9f, a = 0.7f;
+            float rainLevel = 1.0F - mc.level.getRainLevel(event.getPartialTick().getGameTimeDeltaTicks());
+            a *= rainLevel;
 
             VertexConsumer vc = buffer.getBuffer(DCPRenderTypes.holoHex());
 
