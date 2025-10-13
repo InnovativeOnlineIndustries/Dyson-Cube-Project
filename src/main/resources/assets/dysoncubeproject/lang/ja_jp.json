@@ -1,0 +1,18 @@
+{
+  "block.dysoncubeproject.em_railejector_controller": "EMレールガン放射コントローラー",
+  "block.dysoncubeproject.multiblock_structure": "マルチブロック構造物",
+  "block.dysoncubeproject.ray_receiver_controller": "エネルギー光線受信コントローラー",
+  "gui.dysoncubeproject.beams": "構造梁: %s",
+  "gui.dysoncubeproject.dyson_information": "ダイソンキューブ詳細",
+  "gui.dysoncubeproject.needs_more_beams": "構造梁が必要です",
+  "gui.dysoncubeproject.power_con": "消費電力: %s FE",
+  "gui.dysoncubeproject.power_gen": "発電量: %s FE",
+  "gui.dysoncubeproject.progress": "進捗: %s%%",
+  "gui.dysoncubeproject.sails": "セイル: %s/%s",
+  "gui.dysoncubeproject.subscribe": "このダイソン球を購読する",
+  "item.dysoncubeproject.beam": "構造梁",
+  "item.dysoncubeproject.beam_package": "構造梁パッケージ",
+  "item.dysoncubeproject.solar_sail": "ソーラーセイル",
+  "item.dysoncubeproject.solar_sail_package": "ソーラーセイルパッケージ",
+  "itemGroup.dyson_cube_project": "Dyson Cube Project"
+}
