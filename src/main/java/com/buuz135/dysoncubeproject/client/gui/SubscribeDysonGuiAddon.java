@@ -75,8 +75,4 @@ public class SubscribeDysonGuiAddon extends BasicScreenAddon {
         return false;
     }
 
-    private void onClick() {
-
-    }
-
 }
