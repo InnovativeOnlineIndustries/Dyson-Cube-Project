@@ -24,6 +24,7 @@ import java.util.List;
 public class SubscribeDysonGuiAddon extends BasicScreenAddon {
 
     private final String dysonID;
+    private int guiX, guiY;
 
     public SubscribeDysonGuiAddon(String dysonID, int posX, int posY) {
         super(posX, posY);
@@ -32,12 +33,12 @@ public class SubscribeDysonGuiAddon extends BasicScreenAddon {
 
     @Override
     public int getXSize() {
-        return 18;
+        return 16;
     }
 
     @Override
     public int getYSize() {
-        return 18;
+        return 16;
     }
 
     @Override
@@ -51,6 +52,8 @@ public class SubscribeDysonGuiAddon extends BasicScreenAddon {
         int x = guiX + getPosX();
         int y = guiY + getPosY();
         AssetUtil.drawAsset(guiGraphics, screen, assets.getAsset(AssetTypes.BUTTON_SIDENESS_PULL), x, y);
+        this.guiX = guiX;
+        this.guiY = guiY;
     }
 
     @Override
@@ -65,8 +68,11 @@ public class SubscribeDysonGuiAddon extends BasicScreenAddon {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        DysonCubeProject.NETWORK.sendToServer(new ClientSubscribeSphereMessage(dysonID));
-        return true;
+        if (isMouseOver(mouseX - this.guiX, mouseY - this.guiY)) {
+            DysonCubeProject.NETWORK.sendToServer(new ClientSubscribeSphereMessage(dysonID));
+            return true;
+        }
+        return false;
     }
 
     private void onClick() {

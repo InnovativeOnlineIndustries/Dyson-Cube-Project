@@ -2,6 +2,7 @@ package com.buuz135.dysoncubeproject.block.tile;
 
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
+import com.buuz135.dysoncubeproject.client.gui.SubscribeDysonGuiAddon;
 import com.buuz135.dysoncubeproject.world.DysonSphereStructure;
 import com.buuz135.dysoncubeproject.world.DysonSphereProgressSavedData;
 import com.hrznstudio.titanium.annotation.Save;
@@ -128,6 +129,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
         list.addAll(this.energyStorageComponent.getScreenAddons());
         list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 56, 24));
+        list.add(() -> new SubscribeDysonGuiAddon(this.dysonSphereId, 9, 24 + 60));
         return list;
     }
 

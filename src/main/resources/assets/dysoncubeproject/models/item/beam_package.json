@@ -1,5 +1,5 @@
 {
-  "parent": "builtin/generated",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "dysoncubeproject:item/beam_package"
   }
