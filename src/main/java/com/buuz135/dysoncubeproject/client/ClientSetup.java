@@ -43,11 +43,11 @@ public class ClientSetup {
         EventManager.forge(ItemTooltipEvent.class).process(itemTooltipEvent -> {
             var stack = itemTooltipEvent.getItemStack();
             if (stack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) > 0) {
-                itemTooltipEvent.getToolTip().add(Component.literal("Contains " + stack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) + " solar sail(s)")
+                itemTooltipEvent.getToolTip().add(Component.translatable("tooltip.dysoncubeproject.contains_solar_sails", stack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0))
                         .withColor(DCPContent.CYAN_COLOR));
             }
             if (stack.getOrDefault(DCPAttachments.BEAM, 0) > 0) {
-                itemTooltipEvent.getToolTip().add(Component.literal("Contains " + stack.getOrDefault(DCPAttachments.BEAM, 0) + " beam(s)")
+                itemTooltipEvent.getToolTip().add(Component.translatable("tooltip.dysoncubeproject.contains_beams", stack.getOrDefault(DCPAttachments.BEAM, 0))
                         .withColor(DCPContent.CYAN_COLOR));
             }
         }).subscribe();

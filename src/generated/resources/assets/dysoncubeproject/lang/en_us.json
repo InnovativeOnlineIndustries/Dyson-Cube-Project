@@ -14,5 +14,7 @@
   "item.dysoncubeproject.beam_package": "Beam Package",
   "item.dysoncubeproject.solar_sail": "Solar Sail",
   "item.dysoncubeproject.solar_sail_package": "Solar Sail Package",
-  "itemGroup.dyson_cube_project": "Dyson Cube Project"
+  "itemGroup.dyson_cube_project": "Dyson Cube Project",
+  "tooltip.dysoncubeproject.contains_beams": "Contains %s beam(s)",
+  "tooltip.dysoncubeproject.contains_solar_sails": "Contains %s solar sail(s)"
 }
