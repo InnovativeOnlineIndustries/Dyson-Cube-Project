@@ -31,4 +31,8 @@ public class Config {
 
     @ConfigVal(comment = "Always show sphere at max progress")
     public static boolean SHOW_AT_MAX_PROGRESS = false;
+
+    @ConfigVal(comment = "The power that the ray receiver can extract from the sphere every tick")
+    @ConfigVal.InRangeInt(min = 1)
+    public static int RAY_RECEIVER_EXTRACT_POWER = 5_000_000;
 }

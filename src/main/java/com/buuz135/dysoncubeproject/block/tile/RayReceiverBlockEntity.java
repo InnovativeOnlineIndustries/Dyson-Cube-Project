@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
+import com.buuz135.dysoncubeproject.Config;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
 import com.buuz135.dysoncubeproject.client.gui.SubscribeDysonGuiAddon;
@@ -55,7 +56,6 @@ import java.util.List;
 
 public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> implements IScreenAddonProvider, ITickableBlockEntity<RayReceiverBlockEntity>, MenuProvider, IButtonHandler, IContainerAddonProvider, IHasAssetProvider, IComponentHarness {
 
-    public static int EXTRACT_POWER = 512_000;
 
     @Save
     private String dysonSphereId;
@@ -75,13 +75,13 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     public void serverTick(Level level, BlockPos pos, BlockState state, RayReceiverBlockEntity blockEntity) {
         if (level.isDay() && !level.isRaining() && level.canSeeSky(pos.above())) {
             var dyson = DysonSphereProgressSavedData.get(level);
-            var extractingAmount = Math.min(EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
+            var extractingAmount = Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
             var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure()).extractPower(extractingAmount);
             this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + extracted);
         }
         var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);
         if (capability != null && capability.canReceive()) {
-            var received = capability.receiveEnergy(Math.min(EXTRACT_POWER, this.energyStorageComponent.getEnergyStored()), true);
+            var received = capability.receiveEnergy(Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, this.energyStorageComponent.getEnergyStored()), true);
             this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() - received);
             capability.receiveEnergy(received, false);
         }
