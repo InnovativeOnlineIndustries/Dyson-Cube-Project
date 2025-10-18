@@ -1,0 +1,20 @@
+{
+  "block.dysoncubeproject.em_railejector_controller": "EM Top Fırlatıcı Kontrolcüsü",
+  "block.dysoncubeproject.multiblock_structure": "Çok Bloklu Yapı",
+  "block.dysoncubeproject.ray_receiver_controller": "Işın Alıcı Kontrolcüsü",
+  "gui.dysoncubeproject.beams": "Kirişler: %s",
+  "gui.dysoncubeproject.dyson_information": "Dyson Bilgileri",
+  "gui.dysoncubeproject.needs_more_beams": "Daha fazla kirişe ihtiyaç var",
+  "gui.dysoncubeproject.power_con": "Güç Tüketimi: %s FE",
+  "gui.dysoncubeproject.power_gen": "Güç Üretimi: %s FE",
+  "gui.dysoncubeproject.progress": "İlerleme: %s%%",
+  "gui.dysoncubeproject.sails": "Yelkenler: %s/%s",
+  "gui.dysoncubeproject.subscribe": "Bu küreye abone ol",
+  "item.dysoncubeproject.beam": "Kiriş",
+  "item.dysoncubeproject.beam_package": "Kiriş Paketi",
+  "item.dysoncubeproject.solar_sail": "Güneş Yelkeni",
+  "item.dysoncubeproject.solar_sail_package": "Güneş Yelkeni Paketi",
+  "itemGroup.dyson_cube_project": "Dyson Cube Project",
+  "tooltip.dysoncubeproject.contains_beams": "%s kiriş içeriyor",
+  "tooltip.dysoncubeproject.contains_solar_sails": "%s güneş yelkeni içeriyor"
+}
