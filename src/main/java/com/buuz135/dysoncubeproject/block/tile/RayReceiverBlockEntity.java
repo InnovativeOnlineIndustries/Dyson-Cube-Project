@@ -67,7 +67,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
     public RayReceiverBlockEntity(BasicTileBlock<RayReceiverBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
         this.dysonSphereId = "";
-        this.energyStorageComponent = new EnergyStorageComponent<>(10_000_000, 0, Integer.MAX_VALUE, 19, 22);
+        this.energyStorageComponent = new EnergyStorageComponent<>(Config.RAY_RECEIVER_POWER_BUFFER, 0, Integer.MAX_VALUE, 19, 22);
         this.currentPitch = 270;
     }
 

@@ -34,5 +34,9 @@ public class Config {
 
     @ConfigVal(comment = "The power that the ray receiver can extract from the sphere every tick")
     @ConfigVal.InRangeInt(min = 1)
-    public static int RAY_RECEIVER_EXTRACT_POWER = 5_000_000;
+    public static int RAY_RECEIVER_EXTRACT_POWER = 50_000_000;
+
+    @ConfigVal(comment = "The power that the ray receiver buffer has")
+    @ConfigVal.InRangeInt(min = 1)
+    public static int RAY_RECEIVER_POWER_BUFFER = 100_000_000;
 }
