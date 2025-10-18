@@ -103,6 +103,7 @@ public class EMRailEjectorRender implements BlockEntityRenderer<EMRailEjectorBlo
                             lines.addVertex(poseStack.last().pose(), 0.12f + ringOffsetX, y2, z2).setColor(rf, gf, bf, af);
                         }
                     }
+                    Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
                 }
                 poseStack.popPose();
             }

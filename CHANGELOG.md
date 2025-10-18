@@ -4,5 +4,5 @@
 * Added missing lang options
 * Create ja_jp.json - twister716
 * tr_tr.json Turkish Localization - RuyaSavascisi
-*
-    * Increased how much power a Ray Receiver can store a config option to change it
+* Increased how much power a Ray Receiver can store a config option to change it
+* Fixed visual problems with the Ray Receiver when performance mods are installed, closes #1
