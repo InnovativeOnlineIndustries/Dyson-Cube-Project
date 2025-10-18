@@ -15,4 +15,6 @@
   "item.dysoncubeproject.solar_sail": "ソーラーセイル",
   "item.dysoncubeproject.solar_sail_package": "ソーラーセイルパッケージ",
   "itemGroup.dyson_cube_project": "Dyson Cube Project"
+  "tooltip.dysoncubeproject.contains_beams": "構造梁%sつ分",
+  "tooltip.dysoncubeproject.contains_solar_sails": "ソーラーセイル%sつ分"
 }
