@@ -2,17 +2,6 @@ package com.buuz135.dysoncubeproject;
 
 import com.hrznstudio.titanium.annotation.config.ConfigFile;
 import com.hrznstudio.titanium.annotation.config.ConfigVal;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @ConfigFile
 public class Config {
@@ -39,4 +28,12 @@ public class Config {
     @ConfigVal(comment = "The power that the ray receiver buffer has")
     @ConfigVal.InRangeInt(min = 1)
     public static int RAY_RECEIVER_POWER_BUFFER = 100_000_000;
+
+    @ConfigVal(comment = "The power that the em railejector buffer has")
+    @ConfigVal.InRangeInt(min = 1)
+    public static int RAIL_EJECTOR_POWER_BUFFER = 400_000;
+
+    @ConfigVal(comment = "The power that the em railejector consumes each tick per sent item")
+    @ConfigVal.InRangeInt(min = 1)
+    public static int RAIL_EJECTOR_CONSUME = 40;
 }

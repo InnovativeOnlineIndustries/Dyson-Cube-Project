@@ -50,6 +50,10 @@ public class ClientSetup {
                 itemTooltipEvent.getToolTip().add(Component.translatable("tooltip.dysoncubeproject.contains_beams", stack.getOrDefault(DCPAttachments.BEAM, 0))
                         .withColor(DCPContent.CYAN_COLOR));
             }
+            if (stack.is(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.asItem())) {
+                itemTooltipEvent.getToolTip().add(Component.translatable("tooltip.dysoncubeproject.power_optional")
+                        .withColor(DCPContent.CYAN_COLOR));
+            }
         }).subscribe();
     }
 

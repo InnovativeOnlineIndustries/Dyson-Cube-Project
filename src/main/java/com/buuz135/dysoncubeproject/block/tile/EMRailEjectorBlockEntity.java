@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.block.tile;
 
+import com.buuz135.dysoncubeproject.Config;
 import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.client.gui.DysonProgressGuiAddon;
@@ -16,6 +17,7 @@ import com.hrznstudio.titanium.block.tile.ITickableBlockEntity;
 import com.hrznstudio.titanium.client.screen.asset.IAssetProvider;
 import com.hrznstudio.titanium.client.screen.asset.IHasAssetProvider;
 import com.hrznstudio.titanium.component.IComponentHarness;
+import com.hrznstudio.titanium.component.energy.EnergyStorageComponent;
 import com.hrznstudio.titanium.component.inventory.InventoryComponent;
 import com.hrznstudio.titanium.component.progress.ProgressBarComponent;
 import com.hrznstudio.titanium.container.BasicAddonContainer;
@@ -66,17 +68,30 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     @Save
     private InventoryComponent<EMRailEjectorBlockEntity> input;
     @Save
+    private EnergyStorageComponent<EMRailEjectorBlockEntity> power;
+    @Save
     private String dysonSphereId;
+    @Save
+    private int rampupAmount;
+
     private int cooldown;
 
     public EMRailEjectorBlockEntity(BasicTileBlock<EMRailEjectorBlockEntity> base, BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state) {
         super(base, blockEntityType, pos, state);
-        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(10 + 18 + 4, 42, 120).setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
+        this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(45, 21, 120)
+                .setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
             syncObject(this.progressBarComponent);
-        }).setOnFinishWork(this::onFinishWork).setIncreaseType(true).setComponentHarness(this).setBarDirection(ProgressBarComponent.BarDirection.ARROW_RIGHT).setColor(DyeColor.CYAN);
-        this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 10, 42, 1)
+                })
+                .setOnFinishWork(this::onFinishWork)
+                .setIncreaseType(true)
+                .setComponentHarness(this)
+                .setBarDirection(ProgressBarComponent.BarDirection.VERTICAL_UP)
+                .setColor(DyeColor.CYAN)
+                .setOnTickWork(this::onTickWork);
+        this.input = new InventoryComponent<EMRailEjectorBlockEntity>("input", 7, 42, 1)
                 .setInputFilter((itemStack, integer) -> itemStack.getOrDefault(DCPAttachments.SOLAR_SAIL, 0) > 0 || itemStack.getOrDefault(DCPAttachments.BEAM, 0) > 0)
                 .setSlotToColorRender(0, DyeColor.CYAN);
+        this.power = new EnergyStorageComponent<>(Config.RAIL_EJECTOR_POWER_BUFFER, Config.RAIL_EJECTOR_POWER_BUFFER, 0, 26, 21);
         this.currentYaw = 180;
         this.currentPitch = 90;
         this.targetYaw = 180; //HORIZONTAL
@@ -84,6 +99,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         this.lastExecution = 0;
         this.dysonSphereId = "";
         this.cooldown = 0;
+        this.rampupAmount = 0;
     }
 
     private boolean canIncrease() {
@@ -101,21 +117,43 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
         if (solarPanels > 0 && (dyson.getSolarPanels() + solarPanels) >= dyson.getMaxSolarPanels()) return false;
         if (beams > 0 && dyson.getBeams() >= dyson.getMaxBeams()) return false;
+        if (this.rampupAmount > 1 && this.getPower().getEnergyStored() < (Math.pow(this.rampupAmount, 2) * Config.RAIL_EJECTOR_CONSUME)) {
+            this.rampupAmount = 1;
+            return false;
+        }
+
         return true;
+    }
+
+    private void onTickWork() {
+        this.power.setEnergyStored((int) Math.max(0, this.power.getEnergyStored() - (Math.pow(this.rampupAmount, 2) * Config.RAIL_EJECTOR_CONSUME)));
     }
 
     private void onFinishWork() {
         var data = DysonSphereProgressSavedData.get(this.level);
         var dyson = data.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure());
-        var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
-        var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
-        this.input.getStackInSlot(0).shrink(1);
+        boolean reset = false;
+        for (int i = 0; i < this.rampupAmount; i++) {
+            if (!this.input.getStackInSlot(0).isEmpty()) {
+                var solarPanels = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.SOLAR_SAIL, 0);
+                var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
+                this.input.getStackInSlot(0).shrink(1);
+                dyson.increaseBeams(beams);
+                dyson.increaseSolarPanels(solarPanels);
+            } else {
+                reset = true;
+            }
+        }
         this.lastExecution = this.getLevel().getGameTime();
         this.cooldown = 30;
-        dyson.increaseBeams(beams);
-        dyson.increaseSolarPanels(solarPanels);
+
         data.setDirty();
         syncObject(this.lastExecution);
+        if (reset) {
+            this.rampupAmount = 1;
+        } else {
+            this.rampupAmount = Math.min(this.rampupAmount + 1, 64);
+        }
     }
 
     @Override
@@ -212,10 +250,12 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
     @Override
     public @NotNull List<IFactory<? extends IScreenAddon>> getScreenAddons() {
         List<IFactory<? extends IScreenAddon>> list = new ArrayList<>();
-        list.addAll(this.progressBarComponent.getScreenAddons());
         list.addAll(this.input.getScreenAddons());
         list.add(() -> new DysonProgressGuiAddon(this.dysonSphereId, 62, 24));
         list.add(() -> new SubscribeDysonGuiAddon(this.dysonSphereId, 9, 24 + 60));
+        list.addAll(this.power.getScreenAddons());
+        list.addAll(this.progressBarComponent.getScreenAddons());
+
         return list;
     }
 
@@ -229,6 +269,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         var list = new ArrayList<IFactory<? extends IContainerAddon>>();
         list.addAll(this.progressBarComponent.getContainerAddons());
         list.addAll(this.input.getContainerAddons());
+        list.addAll(this.power.getContainerAddons());
         return list;
     }
 
@@ -284,5 +325,9 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
 
     public InventoryComponent<EMRailEjectorBlockEntity> getInput() {
         return input;
+    }
+
+    public EnergyStorageComponent<EMRailEjectorBlockEntity> getPower() {
+        return power;
     }
 }

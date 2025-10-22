@@ -39,6 +39,7 @@ public class DCPLangItemProvider extends LanguageProvider {
         this.add("gui.dysoncubeproject.subscribe", "Subscribe to this sphere");
         this.add("tooltip.dysoncubeproject.contains_solar_sails", "Contains %s solar sail(s)");
         this.add("tooltip.dysoncubeproject.contains_beams", "Contains %s beam(s)");
+        this.add("tooltip.dysoncubeproject.power_optional", "*Power Optional, with power it allows to ramp up how many beams/sails are ejected*");
     }
 
     private void formatItem(Item item) {

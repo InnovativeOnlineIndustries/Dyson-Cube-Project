@@ -1,3 +1,8 @@
+# Version 1.0.2
+
+* Added optional power to the Rail Ejector, with power it will now ramp up the amount of things it can eject at the cost
+  of more power usage each run, closes #5
+
 # Version 1.0.1
 
 * Increased how much power a Ray Receiver can get every tick and added a config option to change it
