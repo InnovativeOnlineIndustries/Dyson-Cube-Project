@@ -1,0 +1,20 @@
+{
+  "block.dysoncubeproject.em_railejector_controller": "Контроллер ЭМ рельсотрона",
+  "block.dysoncubeproject.multiblock_structure": "Мультиблочная структура",
+  "block.dysoncubeproject.ray_receiver_controller": "Контроллер лучевого ресивера",
+  "gui.dysoncubeproject.beams": "Балок: %s",
+  "gui.dysoncubeproject.dyson_information": "Информация о сфере Дайсона",
+  "gui.dysoncubeproject.needs_more_beams": "Нужно больше балок!",
+  "gui.dysoncubeproject.power_con": "Используется: %s FE",
+  "gui.dysoncubeproject.power_gen": "Генерируется: %s FE",
+  "gui.dysoncubeproject.progress": "Прогресс: %s%%",
+  "gui.dysoncubeproject.sails": "Парусов: %s из %s",
+  "gui.dysoncubeproject.subscribe": "Подключиться к этой сфере",
+  "item.dysoncubeproject.beam": "Балка",
+  "item.dysoncubeproject.beam_package": "Связка балок",
+  "item.dysoncubeproject.solar_sail": "Солнечный парус",
+  "item.dysoncubeproject.solar_sail_package": "Комплект солнечных парусов",
+  "itemGroup.dyson_cube_project": "Dyson Cube Project",
+  "tooltip.dysoncubeproject.contains_beams": "содержит %s балок",
+  "tooltip.dysoncubeproject.contains_solar_sails": "содержит %s солнечных парусов"
+}
