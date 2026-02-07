@@ -77,7 +77,7 @@ public class RayReceiverBlockEntity extends BasicTile<RayReceiverBlockEntity> im
             var dyson = DysonSphereProgressSavedData.get(level);
             var extractingAmount = Math.min(Config.RAY_RECEIVER_EXTRACT_POWER, this.energyStorageComponent.getMaxEnergyStored() - this.energyStorageComponent.getEnergyStored());
             var extracted = dyson.getSpheres().computeIfAbsent(this.dysonSphereId, s -> new DysonSphereStructure()).extractPower(extractingAmount);
-            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + (int) extracted);
+            this.energyStorageComponent.setEnergyStored(this.energyStorageComponent.getEnergyStored() + (int) Math.min(extracted, Integer.MAX_VALUE));
         }
         var capability = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos.below(), Direction.UP);
         if (capability != null && capability.canReceive()) {

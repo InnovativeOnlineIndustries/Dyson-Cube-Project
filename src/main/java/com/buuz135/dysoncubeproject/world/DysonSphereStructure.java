@@ -66,7 +66,7 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
         this.storedPower = Math.min(powerGenerated, this.storedPower + powerGenerated);
     }
 
-    public long extractPower(int amount) {
+    public long extractPower(long amount) {
         long extracted = Math.min(amount, this.storedPower);
         this.storedPower -= extracted;
         this.lastConsumedPower += extracted;
