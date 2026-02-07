@@ -10,8 +10,8 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
 
     private int beams;
     private int solarPanels;
-    private int storedPower;
-    private int lastConsumedPower;
+    private long storedPower;
+    private long lastConsumedPower;
 
     public DysonSphereStructure() {
         this(0, 0);
@@ -62,21 +62,22 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
 
     public void generatePower() {
         this.lastConsumedPower = 0;
-        this.storedPower = Math.min(this.solarPanels * Config.POWER_PER_SAIL, this.storedPower + this.solarPanels * Config.POWER_PER_SAIL);
+        long powerGenerated = (long) this.solarPanels * Config.POWER_PER_SAIL;
+        this.storedPower = Math.min(powerGenerated, this.storedPower + powerGenerated);
     }
 
-    public int extractPower(int amount) {
-        int extracted = Math.min(amount, this.storedPower);
+    public long extractPower(int amount) {
+        long extracted = Math.min(amount, this.storedPower);
         this.storedPower -= extracted;
         this.lastConsumedPower += extracted;
         return extracted;
     }
 
-    public int getStoredPower() {
+    public long getStoredPower() {
         return storedPower;
     }
 
-    public int getLastConsumedPower() {
+    public long getLastConsumedPower() {
         return lastConsumedPower;
     }
 
@@ -85,8 +86,8 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putInt("beams", beams);
         compoundTag.putInt("solarPanels", solarPanels);
-        compoundTag.putInt("storedPower", storedPower);
-        compoundTag.putInt("lastConsumedPower", lastConsumedPower);
+        compoundTag.putLong("storedPower", storedPower);
+        compoundTag.putLong("lastConsumedPower", lastConsumedPower);
         return compoundTag;
     }
 
@@ -94,7 +95,7 @@ public class DysonSphereStructure implements INBTSerializable<CompoundTag> {
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compoundTag) {
         this.beams = compoundTag.getInt("beams");
         this.solarPanels = compoundTag.getInt("solarPanels");
-        this.storedPower = compoundTag.getInt("storedPower");
-        this.lastConsumedPower = compoundTag.getInt("lastConsumedPower");
+        this.storedPower = compoundTag.getLong("storedPower");
+        this.lastConsumedPower = compoundTag.getLong("lastConsumedPower");
     }
 }

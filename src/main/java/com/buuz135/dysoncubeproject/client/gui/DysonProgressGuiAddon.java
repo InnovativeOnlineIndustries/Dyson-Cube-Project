@@ -44,7 +44,7 @@ public class DysonProgressGuiAddon extends BasicScreenAddon {
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.progress", new DecimalFormat().format(dyson.getProgress() * 100)).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
-        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_gen", NumberUtils.getFormatedBigNumber(dyson.getSolarPanels() * Config.POWER_PER_SAIL)).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_gen", NumberUtils.getFormatedBigNumber((long) dyson.getSolarPanels() * Config.POWER_PER_SAIL)).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("gui.dysoncubeproject.power_con", NumberUtils.getFormatedBigNumber(dyson.getLastConsumedPower())).withStyle(ChatFormatting.BLUE), this.getPosX() + guiX, this.getPosY() + guiY + Minecraft.getInstance().font.lineHeight * y, 0xFFFFFF, false);
         ++y;
