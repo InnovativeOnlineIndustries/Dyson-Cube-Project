@@ -81,7 +81,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         super(base, blockEntityType, pos, state);
         this.progressBarComponent = new ProgressBarComponent<EMRailEjectorBlockEntity>(45, 21, 120)
                 .setCanIncrease(iComponentHarness -> this.canIncrease()).setOnTickWork(() -> {
-            syncObject(this.progressBarComponent);
+                    syncObject(this.progressBarComponent);
                 })
                 .setOnFinishWork(this::onFinishWork)
                 .setIncreaseType(true)
@@ -118,8 +118,7 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         var beams = this.input.getStackInSlot(0).getOrDefault(DCPAttachments.BEAM, 0);
         if (solarPanels > 0 && (dyson.getSolarPanels() + solarPanels) > dyson.getMaxSolarPanels()) return false;
         if (beams > 0 && dyson.getBeams() >= dyson.getMaxBeams()) return false;
-        if (this.rampupAmount > 1 && this.getPower().getEnergyStored() < (Math.pow(this.rampupAmount, 2) * Config.RAIL_EJECTOR_CONSUME)) {
-            this.rampupAmount = 1;
+        if ((Config.RAIL_EJECTOR_REQUIRES_POWER || this.rampupAmount > 1) && this.getPower().getEnergyStored() < (Math.pow(this.rampupAmount, 2) * Config.RAIL_EJECTOR_CONSUME)) {
             return false;
         }
 
@@ -169,10 +168,14 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
             }
 
             progressBarComponent.tickBar();
+        } else {
+            if (this.cooldown <= 0) {
+                this.rampupAmount = 1;
+            }
 
-
-        } else if (progressBarComponent.getCanReset().test(progressBarComponent.getComponentHarness())) {
-            progressBarComponent.setProgress(progressBarComponent.getIncreaseType() ? 0 : progressBarComponent.getMaxProgress());
+            if (progressBarComponent.getCanReset().test(progressBarComponent.getComponentHarness())) {
+                progressBarComponent.setProgress(progressBarComponent.getIncreaseType() ? 0 : progressBarComponent.getMaxProgress());
+            }
         }
 
         if (this.cooldown > 0) this.cooldown--;
@@ -186,7 +189,6 @@ public class EMRailEjectorBlockEntity extends BasicTile<EMRailEjectorBlockEntity
         if (this.targetPitch >= 360 - 10) {
             this.targetPitch = 10;
         }
-
 
         if (this.targetPitch <= 90) {
             this.targetYaw = 0;

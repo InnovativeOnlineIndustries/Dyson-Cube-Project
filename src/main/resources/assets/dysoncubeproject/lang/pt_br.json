@@ -17,5 +17,6 @@
   "itemGroup.dyson_cube_project": "Projeto Cubo de Dyson",
   "tooltip.dysoncubeproject.contains_beams": "Contém %s raio(s)",
   "tooltip.dysoncubeproject.contains_solar_sails": "Contém %s vela(s) solar(es)",
-  "tooltip.dysoncubeproject.power_optional": "*Energia Opcional, com energia permite aumentar quantos vaios/velas são ejetados*"
+  "tooltip.dysoncubeproject.power_optional": "*Energia Opcional, com energia permite aumentar quantos vaios/velas são ejetados*",
+  "tooltip.dysoncubeproject.power_mandatory": "*Energia Obrigatória, com energia permite aumentar quantos vaios/velas são ejetados*"
 }

@@ -42,6 +42,7 @@ public class DCPLangItemProvider extends LanguageProvider {
         this.add("tooltip.dysoncubeproject.contains_solar_sails", "Contains %s solar sail(s)");
         this.add("tooltip.dysoncubeproject.contains_beams", "Contains %s beam(s)");
         this.add("tooltip.dysoncubeproject.power_optional", "*Power Optional, with power it allows to ramp up how many beams/sails are ejected*");
+        this.add("tooltip.dysoncubeproject.power_mandatory", "*Power Mandatory, with power it allows to ramp up how many beams/sails are ejected*");
         formatAdvancement("root.title", "Dyson Cube Project");
         formatAdvancement("root.description", "TODAY WE STEAL THE SUN!");
         var amounts = new int[]{5, 15, 25, 50, 75, 100};

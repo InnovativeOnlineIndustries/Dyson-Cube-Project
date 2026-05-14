@@ -1,5 +1,6 @@
 package com.buuz135.dysoncubeproject.client;
 
+import com.buuz135.dysoncubeproject.Config;
 import com.buuz135.dysoncubeproject.DCPAttachments;
 import com.buuz135.dysoncubeproject.DCPContent;
 import com.buuz135.dysoncubeproject.DysonCubeProject;
@@ -51,7 +52,7 @@ public class ClientSetup {
                         .withColor(DCPContent.CYAN_COLOR));
             }
             if (stack.is(DCPContent.Blocks.EM_RAILEJECTOR_CONTROLLER.asItem())) {
-                itemTooltipEvent.getToolTip().add(Component.translatable("tooltip.dysoncubeproject.power_optional")
+                itemTooltipEvent.getToolTip().add(Component.translatable(Config.RAIL_EJECTOR_REQUIRES_POWER ? "tooltip.dysoncubeproject.power_mandatory" : "tooltip.dysoncubeproject.power_optional")
                         .withColor(DCPContent.CYAN_COLOR));
             }
         }).subscribe();
